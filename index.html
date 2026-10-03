@@ -6,655 +6,745 @@
 <title>PeerMetals Task Tracker</title>
 
 <style>
-  :root{
-    --bg:#f6f5f1;
-    --panel:#ffffff;
-    --sidebar:#fbfaf7;
-    --text:#171717;
-    --muted:#77736b;
-    --line:#e8e5de;
-    --gold:#c9993f;
-    --gold-dark:#a97825;
-    --gold-soft:#f5ead4;
-    --shadow:0 12px 30px rgba(32,29,22,.07);
-  }
 
-  *{box-sizing:border-box}
+:root{
+  --bg:#f6f5f1;
+  --panel:#ffffff;
+  --sidebar:#fbfaf7;
+  --text:#171717;
+  --muted:#77736b;
+  --line:#e8e5de;
+  --gold:#c9993f;
+  --gold-dark:#a97825;
+  --gold-soft:#f5ead4;
+  --shadow:0 12px 30px rgba(32,29,22,.07);
+}
 
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
-  }
+*{
+  box-sizing:border-box;
+}
 
-  button,input,textarea{font:inherit}
-  button{cursor:pointer}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
 
-  .app{
-    min-height:100vh;
-    display:flex
-  }
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  min-height:100vh;
+  display:flex;
+}
+
+.sidebar{
+  width:235px;
+  background:var(--sidebar);
+  border-right:1px solid var(--line);
+  padding:28px 22px;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:4px 6px 34px;
+}
+
+.brand-mark{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  background:linear-gradient(145deg,#d9ae5b,#b98228);
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-size:14px;
+  box-shadow:0 5px 12px rgba(180,130,45,.2);
+}
+
+.brand-name{
+  font-weight:800;
+  font-size:16px;
+  letter-spacing:-.4px;
+}
+
+.brand-name span{
+  color:var(--gold-dark);
+}
+
+.brand-sub{
+  font-size:8px;
+  letter-spacing:3px;
+  color:#77736b;
+  margin-top:3px;
+}
+
+.calendar-box{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:18px;
+}
+
+.cal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+.cal-head button{
+  border:0;
+  background:transparent;
+  color:#777;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+}
+
+.cal-head button:hover{
+  background:#f1eee7;
+}
+
+.cal-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+  text-align:center;
+  font-size:9px;
+  color:#777;
+}
+
+.cal-grid .dow{
+  font-weight:700;
+  color:#8b877f;
+}
+
+.cal-day{
+  height:22px;
+  display:grid;
+  place-items:center;
+  border-radius:7px;
+  border:0;
+  background:transparent;
+}
+
+.cal-day.active{
+  background:var(--gold);
+  color:white;
+  font-weight:800;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.nav button{
+  border:0;
+  background:transparent;
+  text-align:left;
+  padding:11px 12px;
+  border-radius:10px;
+  color:#4f4c46;
+  font-size:13px;
+}
+
+.nav button.active,
+.nav button:hover{
+  background:var(--gold-soft);
+  color:#8b6424;
+}
+
+.quote{
+  position:absolute;
+  left:32px;
+  bottom:90px;
+  border-left:2px solid #d4a955;
+  padding-left:14px;
+  color:#99938a;
+  font-size:9px;
+  letter-spacing:3px;
+  line-height:1.8;
+}
+
+.main{
+  margin-left:235px;
+  flex:1;
+  padding:30px 38px 70px;
+}
+
+.wrap{
+  max-width:1090px;
+  margin:0 auto;
+}
+
+.topline{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:20px;
+}
+
+.eyebrow{
+  font-size:9px;
+  letter-spacing:4px;
+  color:#9b968e;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+
+.month-label{
+  font-size:9px;
+  letter-spacing:4px;
+  color:#9b968e;
+  margin-top:7px;
+}
+
+h1{
+  font-size:36px;
+  letter-spacing:-1.8px;
+  margin:0;
+  font-weight:800;
+}
+
+.date-nav{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding-bottom:6px;
+  margin-bottom:18px;
+  scrollbar-width:none;
+}
+
+.date-nav::-webkit-scrollbar{
+  display:none;
+}
+
+.date-btn{
+  min-width:56px;
+  height:44px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:#444;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  line-height:1.1;
+  flex:0 0 auto;
+}
+
+.date-btn strong{
+  font-size:12px;
+}
+
+.date-btn span{
+  font-size:9px;
+  color:#777;
+  margin-top:3px;
+}
+
+.date-btn.active{
+  background:var(--gold);
+  border-color:var(--gold);
+  color:#fff;
+  box-shadow:0 5px 14px rgba(194,145,56,.22);
+}
+
+.date-btn.active span{
+  color:#fff;
+}
+
+.progress-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:19px 23px;
+  box-shadow:var(--shadow);
+  display:flex;
+  align-items:center;
+  gap:20px;
+  margin-bottom:22px;
+}
+
+.progress-ring{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:conic-gradient(var(--gold) 0deg,#e6e3dd 0deg);
+  position:relative;
+  flex:0 0 auto;
+}
+
+.progress-ring:after{
+  content:"";
+  position:absolute;
+  inset:7px;
+  background:#fff;
+  border-radius:50%;
+}
+
+.progress-ring span{
+  position:relative;
+  z-index:1;
+  font-weight:800;
+  font-size:13px;
+}
+
+.progress-info{
+  flex:1;
+}
+
+.progress-title{
+  font-size:14px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.bar{
+  height:8px;
+  background:#e7e5e1;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.bar-fill{
+  height:100%;
+  width:0;
+  background:var(--gold);
+  border-radius:99px;
+  transition:.2s;
+}
+
+.motivation{
+  background:var(--gold-soft);
+  color:#8a6323;
+  border-radius:10px;
+  padding:9px 13px;
+  font-size:10px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:19px 22px;
+  box-shadow:var(--shadow);
+}
+
+.card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:13px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:15px;
+  font-weight:800;
+}
+
+.section-icon{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:900;
+}
+
+.twitter .section-icon{
+  background:#e8f0ff;
+  color:#1476d4;
+}
+
+.youtube .section-icon{
+  background:#fff0f1;
+  color:#e31b23;
+}
+
+.feed .section-icon{
+  background:#e6f7f3;
+  color:#18977f;
+}
+
+.emails .section-icon{
+  background:#efefff;
+  color:#665ce8;
+}
+
+.section-count{
+  font-size:10px;
+  color:#888;
+}
+
+.tasks{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+
+.task{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:30px;
+  padding:3px 0;
+}
+
+.check{
+  width:17px;
+  height:17px;
+  border:1.5px solid #bbb8b0;
+  border-radius:3px;
+  appearance:none;
+  background:#fff;
+  flex:0 0 auto;
+  position:relative;
+}
+
+.check:checked{
+  background:#222;
+  border-color:#222;
+}
+
+.check:checked:after{
+  content:"✓";
+  color:#fff;
+  font-size:11px;
+  position:absolute;
+  left:3px;
+  top:-1px;
+}
+
+.task.done .task-label{
+  text-decoration:line-through;
+  color:#aaa;
+}
+
+.task-label{
+  font-size:12px;
+  line-height:1.3;
+  flex:1;
+}
+
+.content-btn{
+  border:1px solid #e3dfd6;
+  background:#faf9f6;
+  color:#8b6424;
+  border-radius:7px;
+  padding:4px 7px;
+  font-size:9px;
+  white-space:nowrap;
+}
+
+.content-btn:hover{
+  background:var(--gold-soft);
+  border-color:#e1c995;
+}
+
+.content-btn.has-content{
+  background:#f5ead4;
+  border-color:#e1c995;
+  font-weight:700;
+}
+
+.weekend{
+  grid-column:1/-1;
+}
+
+.weekend .section-icon{
+  background:var(--gold-soft);
+  color:#9a6d20;
+}
+
+.weekend-card{
+  padding-bottom:20px;
+}
+
+.weekend-note{
+  font-size:11px;
+  color:#77736b;
+  margin-top:-5px;
+  margin-bottom:12px;
+}
+
+.reset{
+  display:block;
+  margin:18px auto 0;
+  border:1px solid #dfd8c9;
+  background:#fff;
+  border-radius:20px;
+  padding:8px 15px;
+  font-size:10px;
+  color:#625d54;
+}
+
+.reset:hover{
+  background:#faf7ef;
+}
+
+.empty{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:55px;
+  text-align:center;
+  color:#8d8981;
+  box-shadow:var(--shadow);
+}
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(20,18,14,.38);
+  backdrop-filter:blur(4px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:50;
+}
+
+.modal-backdrop.open{
+  display:flex;
+}
+
+.modal{
+  width:min(680px,100%);
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 25px 70px rgba(0,0,0,.2);
+  overflow:hidden;
+}
+
+.modal-head{
+  padding:18px 21px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-title{
+  font-weight:800;
+  font-size:15px;
+}
+
+.modal-sub{
+  font-size:10px;
+  color:#8a857c;
+  margin-top:3px;
+}
+
+.close{
+  border:0;
+  background:#f5f3ee;
+  border-radius:50%;
+  width:30px;
+  height:30px;
+  font-size:17px;
+  color:#666;
+}
+
+.modal-body{
+  padding:18px 21px;
+}
+
+.modal textarea{
+  width:100%;
+  min-height:330px;
+  border:1px solid #ddd9d0;
+  border-radius:12px;
+  padding:14px;
+  resize:vertical;
+  outline:none;
+  font-size:13px;
+  line-height:1.55;
+  color:#222;
+}
+
+.modal textarea:focus{
+  border-color:#caa45e;
+  box-shadow:0 0 0 3px rgba(201,153,63,.1);
+}
+
+.modal-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:12px;
+}
+
+.modal-foot button{
+  border-radius:9px;
+  padding:9px 14px;
+  border:1px solid #ddd8cf;
+  background:#fff;
+  font-size:11px;
+}
+
+.save{
+  background:#b98935!important;
+  border-color:#b98935!important;
+  color:#fff;
+}
+
+.delete-content{
+  margin-right:auto;
+  color:#a94b3e!important;
+}
+
+.toast{
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#222;
+  color:#fff;
+  border-radius:10px;
+  padding:9px 13px;
+  font-size:11px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:100;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+.firebase-status{
+  position:fixed;
+  right:18px;
+  top:18px;
+  z-index:200;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  border-radius:20px;
+  padding:7px 12px;
+  font-size:10px;
+  color:#777;
+}
+
+.firebase-status.online{
+  color:#287a4b;
+}
+
+.firebase-status.error{
+  color:#a94b3e;
+}
+
+@media(max-width:900px){
 
   .sidebar{
-    width:235px;
-    background:var(--sidebar);
-    border-right:1px solid var(--line);
-    padding:28px 22px;
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0
-  }
-
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin:4px 6px 34px
-  }
-
-  .brand-mark{
-    width:34px;
-    height:34px;
-    border-radius:10px;
-    background:linear-gradient(145deg,#d9ae5b,#b98228);
-    display:grid;
-    place-items:center;
-    color:#fff;
-    font-size:14px;
-    box-shadow:0 5px 12px rgba(180,130,45,.2)
-  }
-
-  .brand-name{
-    font-weight:800;
-    font-size:16px;
-    letter-spacing:-.4px
-  }
-
-  .brand-name span{color:var(--gold-dark)}
-
-  .brand-sub{
-    font-size:8px;
-    letter-spacing:3px;
-    color:#77736b;
-    margin-top:3px
-  }
-
-  .calendar-box{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:14px;
-    margin-bottom:18px
-  }
-
-  .cal-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:12px;
-    font-weight:800;
-    margin-bottom:12px
-  }
-
-  .cal-head button{
-    border:0;
-    background:transparent;
-    color:#777;
-    width:24px;
-    height:24px;
-    border-radius:50%
-  }
-
-  .cal-head button:hover{background:#f1eee7}
-
-  .cal-grid{
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-    gap:6px;
-    text-align:center;
-    font-size:9px;
-    color:#777
-  }
-
-  .cal-grid .dow{
-    font-weight:700;
-    color:#8b877f
-  }
-
-  .cal-day{
-    height:22px;
-    display:grid;
-    place-items:center;
-    border-radius:7px;
-    border:0;
-    background:transparent
-  }
-
-  .cal-day.active{
-    background:var(--gold);
-    color:white;
-    font-weight:800
-  }
-
-  .nav{
-    display:flex;
-    flex-direction:column;
-    gap:6px
-  }
-
-  .nav button{
-    border:0;
-    background:transparent;
-    text-align:left;
-    padding:11px 12px;
-    border-radius:10px;
-    color:#4f4c46;
-    font-size:13px
-  }
-
-  .nav button.active,
-  .nav button:hover{
-    background:var(--gold-soft);
-    color:#8b6424
-  }
-
-  .quote{
-    position:absolute;
-    left:32px;
-    bottom:90px;
-    border-left:2px solid #d4a955;
-    padding-left:14px;
-    color:#99938a;
-    font-size:9px;
-    letter-spacing:3px;
-    line-height:1.8
+    display:none;
   }
 
   .main{
-    margin-left:235px;
-    flex:1;
-    padding:30px 38px 70px
-  }
-
-  .wrap{
-    max-width:1090px;
-    margin:0 auto
-  }
-
-  .topline{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    margin-bottom:20px
-  }
-
-  .eyebrow{
-    font-size:9px;
-    letter-spacing:4px;
-    color:#9b968e;
-    text-transform:uppercase;
-    margin-bottom:12px
-  }
-
-  .month-label{
-    font-size:9px;
-    letter-spacing:4px;
-    color:#9b968e;
-    margin-top:7px
-  }
-
-  h1{
-    font-size:36px;
-    letter-spacing:-1.8px;
-    margin:0;
-    font-weight:800
-  }
-
-  .date-nav{
-    display:flex;
-    gap:7px;
-    overflow-x:auto;
-    padding-bottom:6px;
-    margin-bottom:18px;
-    scrollbar-width:none
-  }
-
-  .date-nav::-webkit-scrollbar{display:none}
-
-  .date-btn{
-    min-width:56px;
-    height:44px;
-    border-radius:12px;
-    border:1px solid var(--line);
-    background:#fff;
-    color:#444;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    line-height:1.1;
-    flex:0 0 auto
-  }
-
-  .date-btn strong{font-size:12px}
-
-  .date-btn span{
-    font-size:9px;
-    color:#777;
-    margin-top:3px
-  }
-
-  .date-btn.active{
-    background:var(--gold);
-    border-color:var(--gold);
-    color:#fff;
-    box-shadow:0 5px 14px rgba(194,145,56,.22)
-  }
-
-  .date-btn.active span{color:#fff}
-
-  .progress-card{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:19px 23px;
-    box-shadow:var(--shadow);
-    display:flex;
-    align-items:center;
-    gap:20px;
-    margin-bottom:22px
-  }
-
-  .progress-ring{
-    width:60px;
-    height:60px;
-    border-radius:50%;
-    display:grid;
-    place-items:center;
-    background:conic-gradient(var(--gold) 0deg,#e6e3dd 0deg);
-    position:relative;
-    flex:0 0 auto
-  }
-
-  .progress-ring:after{
-    content:"";
-    position:absolute;
-    inset:7px;
-    background:#fff;
-    border-radius:50%
-  }
-
-  .progress-ring span{
-    position:relative;
-    z-index:1;
-    font-weight:800;
-    font-size:13px
-  }
-
-  .progress-info{flex:1}
-
-  .progress-title{
-    font-size:14px;
-    font-weight:800;
-    margin-bottom:10px
-  }
-
-  .bar{
-    height:8px;
-    background:#e7e5e1;
-    border-radius:99px;
-    overflow:hidden
-  }
-
-  .bar-fill{
-    height:100%;
-    width:0;
-    background:var(--gold);
-    border-radius:99px;
-    transition:.2s
-  }
-
-  .motivation{
-    background:var(--gold-soft);
-    color:#8a6323;
-    border-radius:10px;
-    padding:9px 13px;
-    font-size:10px;
-    font-weight:700;
-    white-space:nowrap
+    margin-left:0;
+    padding:22px 16px 50px;
   }
 
   .cards{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px
+    grid-template-columns:1fr;
+  }
+
+  h1{
+    font-size:30px;
+  }
+
+  .month-label{
+    display:none;
+  }
+}
+
+@media(max-width:560px){
+
+  .progress-card{
+    align-items:flex-start;
+  }
+
+  .motivation{
+    display:none;
+  }
+
+  .date-nav{
+    margin-right:-16px;
   }
 
   .card{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:17px;
-    padding:19px 22px;
-    box-shadow:var(--shadow)
-  }
-
-  .card-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:13px
-  }
-
-  .section-title{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:15px;
-    font-weight:800
-  }
-
-  .section-icon{
-    width:30px;
-    height:30px;
-    border-radius:50%;
-    display:grid;
-    place-items:center;
-    font-size:12px;
-    font-weight:900
-  }
-
-  .twitter .section-icon{
-    background:#e8f0ff;
-    color:#1476d4
-  }
-
-  .youtube .section-icon{
-    background:#fff0f1;
-    color:#e31b23
-  }
-
-  .feed .section-icon{
-    background:#e6f7f3;
-    color:#18977f
-  }
-
-  .emails .section-icon{
-    background:#efefff;
-    color:#665ce8
-  }
-
-  .section-count{
-    font-size:10px;
-    color:#888
-  }
-
-  .tasks{
-    display:flex;
-    flex-direction:column;
-    gap:0
-  }
-
-  .task{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    min-height:30px;
-    padding:3px 0
-  }
-
-  .check{
-    width:17px;
-    height:17px;
-    border:1.5px solid #bbb8b0;
-    border-radius:3px;
-    appearance:none;
-    background:#fff;
-    flex:0 0 auto;
-    position:relative
-  }
-
-  .check:checked{
-    background:#222;
-    border-color:#222
-  }
-
-  .check:checked:after{
-    content:"✓";
-    color:#fff;
-    font-size:11px;
-    position:absolute;
-    left:3px;
-    top:-1px
-  }
-
-  .task.done .task-label{
-    text-decoration:line-through;
-    color:#aaa
+    padding:16px;
   }
 
   .task-label{
-    font-size:12px;
-    line-height:1.3;
-    flex:1
+    font-size:11px;
   }
 
   .content-btn{
-    border:1px solid #e3dfd6;
-    background:#faf9f6;
-    color:#8b6424;
-    border-radius:7px;
-    padding:4px 7px;
-    font-size:9px;
-    white-space:nowrap
+    font-size:8px;
+    padding:4px 6px;
   }
+}
 
-  .content-btn:hover{
-    background:var(--gold-soft);
-    border-color:#e1c995
-  }
-
-  .content-btn.has-content{
-    background:#f5ead4;
-    border-color:#e1c995;
-    font-weight:700
-  }
-
-  .weekend{
-    grid-column:1/-1
-  }
-
-  .weekend .section-icon{
-    background:var(--gold-soft);
-    color:#9a6d20
-  }
-
-  .weekend-card{padding-bottom:20px}
-
-  .weekend-note{
-    font-size:11px;
-    color:#77736b;
-    margin-top:-5px;
-    margin-bottom:12px
-  }
-
-  .reset{
-    display:block;
-    margin:18px auto 0;
-    border:1px solid #dfd8c9;
-    background:#fff;
-    border-radius:20px;
-    padding:8px 15px;
-    font-size:10px;
-    color:#625d54
-  }
-
-  .reset:hover{background:#faf7ef}
-
-  .empty{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:55px;
-    text-align:center;
-    color:#8d8981;
-    box-shadow:var(--shadow)
-  }
-
-  .modal-backdrop{
-    position:fixed;
-    inset:0;
-    background:rgba(20,18,14,.38);
-    backdrop-filter:blur(4px);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    z-index:50
-  }
-
-  .modal-backdrop.open{display:flex}
-
-  .modal{
-    width:min(680px,100%);
-    background:#fff;
-    border-radius:20px;
-    box-shadow:0 25px 70px rgba(0,0,0,.2);
-    overflow:hidden
-  }
-
-  .modal-head{
-    padding:18px 21px;
-    border-bottom:1px solid var(--line);
-    display:flex;
-    justify-content:space-between;
-    align-items:center
-  }
-
-  .modal-title{
-    font-weight:800;
-    font-size:15px
-  }
-
-  .modal-sub{
-    font-size:10px;
-    color:#8a857c;
-    margin-top:3px
-  }
-
-  .close{
-    border:0;
-    background:#f5f3ee;
-    border-radius:50%;
-    width:30px;
-    height:30px;
-    font-size:17px;
-    color:#666
-  }
-
-  .modal-body{padding:18px 21px}
-
-  .modal textarea{
-    width:100%;
-    min-height:330px;
-    border:1px solid #ddd9d0;
-    border-radius:12px;
-    padding:14px;
-    resize:vertical;
-    outline:none;
-    font-size:13px;
-    line-height:1.55;
-    color:#222
-  }
-
-  .modal textarea:focus{
-    border-color:#caa45e;
-    box-shadow:0 0 0 3px rgba(201,153,63,.1)
-  }
-
-  .modal-foot{
-    display:flex;
-    justify-content:flex-end;
-    gap:8px;
-    margin-top:12px
-  }
-
-  .modal-foot button{
-    border-radius:9px;
-    padding:9px 14px;
-    border:1px solid #ddd8cf;
-    background:#fff;
-    font-size:11px
-  }
-
-  .save{
-    background:#b98935!important;
-    border-color:#b98935!important;
-    color:#fff
-  }
-
-  .delete-content{
-    margin-right:auto;
-    color:#a94b3e!important
-  }
-
-  .toast{
-    position:fixed;
-    bottom:24px;
-    left:50%;
-    transform:translateX(-50%) translateY(20px);
-    background:#222;
-    color:#fff;
-    border-radius:10px;
-    padding:9px 13px;
-    font-size:11px;
-    opacity:0;
-    pointer-events:none;
-    transition:.25s;
-    z-index:100
-  }
-
-  .toast.show{
-    opacity:1;
-    transform:translateX(-50%) translateY(0)
-  }
-
-  @media(max-width:900px){
-    .sidebar{display:none}
-    .main{
-      margin-left:0;
-      padding:22px 16px 50px
-    }
-    .cards{grid-template-columns:1fr}
-    h1{font-size:30px}
-    .month-label{display:none}
-  }
-
-  @media(max-width:560px){
-    .progress-card{align-items:flex-start}
-    .motivation{display:none}
-    .date-nav{margin-right:-16px}
-    .card{padding:16px}
-    .task-label{font-size:11px}
-    .content-btn{
-      font-size:8px;
-      padding:4px 6px
-    }
-  }
 </style>
 </head>
 
 <body>
+
+<div class="firebase-status" id="firebaseStatus">
+  Connecting...
+</div>
 
 <div class="app">
 
   <aside class="sidebar">
 
     <div class="brand">
-      <div class="brand-mark">▦</div>
+
+      <div class="brand-mark">
+        ▦
+      </div>
 
       <div>
+
         <div class="brand-name">
           Peer<span>Metals</span>
         </div>
@@ -662,7 +752,9 @@
         <div class="brand-sub">
           TASK TRACKER
         </div>
+
       </div>
+
     </div>
 
     <div class="calendar-box">
@@ -721,7 +813,6 @@
 
   </aside>
 
-
   <main class="main">
 
     <div class="wrap">
@@ -749,12 +840,10 @@
 
       </div>
 
-
       <div
         class="date-nav"
         id="dateNav"
       ></div>
-
 
       <section class="progress-card">
 
@@ -768,7 +857,6 @@
           </span>
 
         </div>
-
 
         <div class="progress-info">
 
@@ -790,13 +878,11 @@
 
         </div>
 
-
         <div class="motivation">
           ✦ &nbsp; Keep going!
         </div>
 
       </section>
-
 
       <div id="taskArea"></div>
 
@@ -805,7 +891,6 @@
   </main>
 
 </div>
-
 
 <div
   class="modal-backdrop"
@@ -843,14 +928,12 @@
 
     </div>
 
-
     <div class="modal-body">
 
       <textarea
         id="contentInput"
         placeholder="Paste or write your script, caption, post copy, notes, links, or any content here..."
       ></textarea>
-
 
       <div class="modal-foot">
 
@@ -880,14 +963,78 @@
 
 </div>
 
-
 <div
   class="toast"
   id="toast"
 ></div>
 
 
-<script>
+<script type="module">
+
+/* =========================================================
+   FIREBASE
+========================================================= */
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyA4KdCgPeKwnkZXDcyqrzTozZo6WF6ueg",
+
+  authDomain:
+    "peermetals-task-tracker.firebaseapp.com",
+
+  databaseURL:
+    "https://peermetals-task-tracker-default-rtdb.firebaseio.com",
+
+  projectId:
+    "peermetals-task-tracker",
+
+  storageBucket:
+    "peermetals-task-tracker.firebasestorage.app",
+
+  messagingSenderId:
+    "1026078145792",
+
+  appId:
+    "1:1026078145792:web:9abad86c0fbd83b75007e5",
+
+  measurementId:
+    "G-YEFX1P0M60"
+
+};
+
+
+const app =
+  initializeApp(firebaseConfig);
+
+const db =
+  getDatabase(app);
+
+const auth =
+  getAuth(app);
+
+
+/* =========================================================
+   APP DATA
+========================================================= */
 
 const weekdays = {
 
@@ -917,7 +1064,6 @@ const weekdays = {
 
   },
 
-
   youtube: {
 
     title:'YouTube',
@@ -942,7 +1088,6 @@ const weekdays = {
 
   },
 
-
   feed: {
 
     title:'Feed',
@@ -966,7 +1111,6 @@ const weekdays = {
     ]
 
   },
-
 
   emails: {
 
@@ -1034,28 +1178,46 @@ let currentContentKey =
   null;
 
 
-const STORAGE_TASKS =
-  'peermetals_task_tracker_v1';
+/* =========================================================
+   FIREBASE STATE
+========================================================= */
 
-const STORAGE_CONTENT =
-  'peermetals_content_v1';
+let taskState = {};
 
+let contentState = {};
 
-let taskState =
-  JSON.parse(
-    localStorage.getItem(
-      STORAGE_TASKS
-    ) || '{}'
-  );
+let firebaseReady = false;
+
+let currentUser = null;
 
 
-let contentState =
-  JSON.parse(
-    localStorage.getItem(
-      STORAGE_CONTENT
-    ) || '{}'
-  );
+/* =========================================================
+   FIREBASE STATUS
+========================================================= */
 
+function setFirebaseStatus(
+  message,
+  type=''
+){
+
+  const el =
+    document.getElementById(
+      'firebaseStatus'
+    );
+
+  el.textContent =
+    message;
+
+  el.className =
+    'firebase-status '+
+    type;
+
+}
+
+
+/* =========================================================
+   DATE HELPERS
+========================================================= */
 
 function keyForDate(date){
 
@@ -1114,6 +1276,10 @@ function isSunday(date){
 
 }
 
+
+/* =========================================================
+   TASK HELPERS
+========================================================= */
 
 function taskKey(
   dateKey,
@@ -1187,48 +1353,156 @@ function getTasks(dateKey){
 }
 
 
-/*
-  SAVE
+/* =========================================================
+   FIREBASE SAVE
+========================================================= */
 
-  This now saves locally first.
-
-  If Firebase is connected,
-  firebaseSyncSave() will also
-  save everything to Firebase.
-*/
-
-function save(){
-
-  localStorage.setItem(
-    STORAGE_TASKS,
-    JSON.stringify(
-      taskState
-    )
-  );
-
-
-  localStorage.setItem(
-    STORAGE_CONTENT,
-    JSON.stringify(
-      contentState
-    )
-  );
-
+async function save(){
 
   if(
-    typeof window.firebaseSyncSave ===
-    'function'
+    !firebaseReady ||
+    !currentUser
   ){
 
-    window.firebaseSyncSave(
-      taskState,
-      contentState
+    return;
+
+  }
+
+
+  try{
+
+    await Promise.all([
+
+      set(
+        ref(
+          db,
+          'tracker/tasks'
+        ),
+        taskState
+      ),
+
+      set(
+        ref(
+          db,
+          'tracker/content'
+        ),
+        contentState
+      )
+
+    ]);
+
+    setFirebaseStatus(
+      '✓ Saved',
+      'online'
+    );
+
+  }catch(error){
+
+    console.error(
+      'Firebase save error:',
+      error
+    );
+
+    setFirebaseStatus(
+      'Firebase save error',
+      'error'
+    );
+
+    toast(
+      'Could not save to Firebase'
     );
 
   }
 
 }
 
+
+/* =========================================================
+   FIREBASE LOAD
+========================================================= */
+
+function loadFirebaseData(){
+
+  const tasksRef =
+    ref(
+      db,
+      'tracker/tasks'
+    );
+
+  const contentRef =
+    ref(
+      db,
+      'tracker/content'
+    );
+
+
+  onValue(
+    tasksRef,
+    snapshot=>{
+
+      const data =
+        snapshot.val();
+
+      taskState =
+        data && typeof data==='object'
+          ? data
+          : {};
+
+      render();
+
+    },
+    error=>{
+
+      console.error(
+        'Tasks Firebase error:',
+        error
+      );
+
+      setFirebaseStatus(
+        'Firebase error',
+        'error'
+      );
+
+    }
+  );
+
+
+  onValue(
+    contentRef,
+    snapshot=>{
+
+      const data =
+        snapshot.val();
+
+      contentState =
+        data && typeof data==='object'
+          ? data
+          : {};
+
+      render();
+
+    },
+    error=>{
+
+      console.error(
+        'Content Firebase error:',
+        error
+      );
+
+      setFirebaseStatus(
+        'Firebase error',
+        'error'
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   CALENDAR
+========================================================= */
 
 function renderMiniCalendar(){
 
@@ -1238,8 +1512,7 @@ function renderMiniCalendar(){
     );
 
 
-  const heads = [
-
+  const heads=[
     'Mon',
     'Tue',
     'Wed',
@@ -1247,7 +1520,6 @@ function renderMiniCalendar(){
     'Fri',
     'Sat',
     'Sun'
-
   ];
 
 
@@ -1255,9 +1527,7 @@ function renderMiniCalendar(){
     heads
       .map(
         x=>
-          `<div class="dow">
-            ${x[0]}
-          </div>`
+          `<div class="dow">${x[0]}</div>`
       )
       .join('');
 
@@ -1307,12 +1577,15 @@ function renderMiniCalendar(){
     el.innerHTML += `
 
       <button
+
         class="cal-day ${
           key===selectedKey
             ? 'active'
             : ''
         }"
+
         data-key="${key}"
+
       >
 
         ${d}
@@ -1328,7 +1601,7 @@ function renderMiniCalendar(){
     .querySelectorAll('.cal-day')
     .forEach(
       b=>
-        b.onclick =
+        b.onclick=
           ()=>
             selectDate(
               b.dataset.key
@@ -1337,6 +1610,10 @@ function renderMiniCalendar(){
 
 }
 
+
+/* =========================================================
+   DATE NAVIGATION
+========================================================= */
 
 function renderDateNav(){
 
@@ -1358,12 +1635,15 @@ function renderDateNav(){
           return `
 
             <button
+
               class="date-btn ${
                 key===selectedKey
                   ? 'active'
                   : ''
               }"
+
               data-key="${key}"
+
             >
 
               <strong>
@@ -1396,7 +1676,7 @@ function renderDateNav(){
     .querySelectorAll('.date-btn')
     .forEach(
       b=>
-        b.onclick =
+        b.onclick=
           ()=>
             selectDate(
               b.dataset.key
@@ -1413,15 +1693,23 @@ function renderDateNav(){
   if(active){
 
     active.scrollIntoView({
+
       inline:'center',
+
       behavior:'smooth',
+
       block:'nearest'
+
     });
 
   }
 
 }
 
+
+/* =========================================================
+   MAIN RENDER
+========================================================= */
 
 function render(){
 
@@ -1463,6 +1751,10 @@ function render(){
 
 }
 
+
+/* =========================================================
+   TASK RENDER
+========================================================= */
 
 function renderTasks(){
 
@@ -1512,169 +1804,193 @@ function renderTasks(){
     <div class="cards">
 
       ${
-        sections.map(
-          section=>{
+        sections
+          .map(
+            section=>{
 
-            const count =
-              section.tasks.length;
+              const count =
+                section.tasks.length;
 
 
-            return `
+              return `
 
-              <section
-                class="card ${
-                  section.cls
-                } ${
-                  section.id==='weekend'
-                    ? 'weekend-card'
-                    : ''
-                }"
-              >
+                <section
 
-                <div class="card-head">
+                  class="card ${
+                    section.cls
+                  } ${
+                    section.id==='weekend'
+                      ? 'weekend-card'
+                      : ''
+                  }"
 
-                  <div class="section-title">
+                >
 
-                    <span class="section-icon">
+                  <div class="card-head">
 
-                      ${section.icon}
+                    <div class="section-title">
+
+                      <span class="section-icon">
+
+                        ${section.icon}
+
+                      </span>
+
+                      ${section.title}
+
+                    </div>
+
+
+                    <span
+
+                      class="section-count"
+
+                      id="count-${section.id}"
+
+                    >
+
+                      0 / ${count}
 
                     </span>
-
-                    ${section.title}
 
                   </div>
 
 
-                  <span
-                    class="section-count"
-                    id="count-${section.id}"
-                  >
-                    0 / ${count}
-                  </span>
-
-                </div>
-
-
-                ${
-                  section.id==='weekend'
-                  ?
-                  `
-
-                    <div class="weekend-note">
-
-                      Saturday special task —
-                      nothing else is scheduled today.
-
-                    </div>
-
-                  `
-                  :
-                  ''
-                }
-
-
-                <div class="tasks">
-
                   ${
-                    section.tasks.map(
-                      task=>{
+                    section.id==='weekend'
+                    ?
 
-                        const tk =
-                          taskKey(
-                            selectedKey,
-                            section.id,
-                            task
-                          );
+                    `
 
+                      <div class="weekend-note">
 
-                        const checked =
-                          !!taskState[tk];
+                        Saturday special task —
+                        nothing else is scheduled today.
 
+                      </div>
 
-                        const has =
-                          !!contentState[tk];
+                    `
 
+                    :
 
-                        return `
-
-                          <label
-                            class="task ${
-                              checked
-                                ? 'done'
-                                : ''
-                            }"
-                            data-task-key="${
-                              escapeAttr(tk)
-                            }"
-                          >
-
-                            <input
-                              class="check"
-                              type="checkbox"
-                              ${
-                                checked
-                                  ? 'checked'
-                                  : ''
-                              }
-                            >
-
-
-                            <span class="task-label">
-
-                              ${
-                                escapeHtml(
-                                  task
-                                )
-                              }
-
-                            </span>
-
-
-                            <button
-                              type="button"
-                              class="content-btn ${
-                                has
-                                  ? 'has-content'
-                                  : ''
-                              }"
-                              data-content-key="${
-                                escapeAttr(tk)
-                              }"
-                            >
-
-                              ${
-                                has
-                                  ? 'View Content'
-                                  : '＋ Content'
-                              }
-
-                            </button>
-
-                          </label>
-
-                        `;
-
-                      }
-                    ).join('')
+                    ''
                   }
 
-                </div>
 
-              </section>
+                  <div class="tasks">
 
-            `;
+                    ${
+                      section.tasks
+                        .map(
+                          task=>{
 
-          }
-        ).join('')
+                            const tk =
+                              taskKey(
+                                selectedKey,
+                                section.id,
+                                task
+                              );
+
+
+                            const checked =
+                              !!taskState[tk];
+
+
+                            const has =
+                              !!contentState[tk];
+
+
+                            return `
+
+                              <label
+
+                                class="task ${
+                                  checked
+                                    ? 'done'
+                                    : ''
+                                }"
+
+                                data-task-key="${escapeAttr(tk)}"
+
+                              >
+
+                                <input
+
+                                  class="check"
+
+                                  type="checkbox"
+
+                                  ${
+                                    checked
+                                      ? 'checked'
+                                      : ''
+                                  }
+
+                                >
+
+
+                                <span class="task-label">
+
+                                  ${
+                                    escapeHtml(
+                                      task
+                                    )
+                                  }
+
+                                </span>
+
+
+                                <button
+
+                                  type="button"
+
+                                  class="content-btn ${
+                                    has
+                                      ? 'has-content'
+                                      : ''
+                                  }"
+
+                                  data-content-key="${escapeAttr(tk)}"
+
+                                >
+
+                                  ${
+                                    has
+                                      ? 'View Content'
+                                      : '＋ Content'
+                                  }
+
+                                </button>
+
+                              </label>
+
+                            `;
+
+                          }
+                        )
+                        .join('')
+                    }
+
+                  </div>
+
+                </section>
+
+              `;
+
+            }
+          )
+          .join('')
       }
 
     </div>
 
 
     <button
+
       class="reset"
+
       id="resetDay"
+
     >
 
       ↻ &nbsp; Reset This Day
@@ -1690,7 +2006,7 @@ function renderTasks(){
       cb=>
         cb.addEventListener(
           'change',
-          e=>{
+          async e=>{
 
             const tk =
               e.target
@@ -1702,8 +2018,7 @@ function renderTasks(){
               e.target.checked
             ){
 
-              taskState[tk] =
-                true;
+              taskState[tk]=true;
 
             }else{
 
@@ -1712,11 +2027,11 @@ function renderTasks(){
             }
 
 
-            save();
-
-            renderTasks();
-
             updateProgress();
+
+            updateSectionCounts();
+
+            await save();
 
           }
         )
@@ -1729,32 +2044,29 @@ function renderTasks(){
       btn=>
         btn.addEventListener(
           'click',
-          ()=>{
-            openContent(
-              btn.dataset.contentKey
-            );
-          }
+          ()=>openContent(
+            btn.dataset.contentKey
+          )
         )
     );
 
 
   document.getElementById(
     'resetDay'
-  ).onclick = ()=>{
+  ).onclick = async ()=>{
 
     getTasks(
       selectedKey
-    )
-    .forEach(
+    ).forEach(
       t=>{
         delete taskState[t];
       }
     );
 
 
-    save();
-
     render();
+
+    await save();
 
     toast(
       'Day reset'
@@ -1767,6 +2079,10 @@ function renderTasks(){
 
 }
 
+
+/* =========================================================
+   SECTION COUNTS
+========================================================= */
 
 function updateSectionCounts(){
 
@@ -1786,7 +2102,9 @@ function updateSectionCounts(){
           );
 
 
-        if(!el)return;
+        if(!el){
+          return;
+        }
 
 
         const done =
@@ -1811,6 +2129,10 @@ function updateSectionCounts(){
 }
 
 
+/* =========================================================
+   PROGRESS
+========================================================= */
+
 function updateProgress(){
 
   const tasks =
@@ -1825,7 +2147,8 @@ function updateProgress(){
 
   const done =
     tasks.filter(
-      t=>taskState[t]
+      t=>
+        taskState[t]
     ).length;
 
 
@@ -1868,6 +2191,10 @@ function updateProgress(){
 }
 
 
+/* =========================================================
+   DATE SELECT
+========================================================= */
+
 function selectDate(key){
 
   if(
@@ -1900,10 +2227,16 @@ function selectDate(key){
 }
 
 
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
 function escapeHtml(s){
 
   return s.replace(
+
     /[&<>'"]/g,
+
     c=>
       ({
         '&':'&amp;',
@@ -1912,6 +2245,7 @@ function escapeHtml(s){
         "'":'&#39;',
         '"':'&quot;'
       }[c])
+
   );
 
 }
@@ -1923,6 +2257,10 @@ function escapeAttr(s){
 
 }
 
+
+/* =========================================================
+   CONTENT MODAL
+========================================================= */
 
 function openContent(tk){
 
@@ -2005,14 +2343,16 @@ function openContent(tk){
 
 
   setTimeout(
-    ()=>{
+
+    ()=>
       document
         .getElementById(
           'contentInput'
         )
-        .focus();
-    },
+        .focus(),
+
     50
+
   );
 
 }
@@ -2048,7 +2388,9 @@ document.getElementById(
 document.getElementById(
   'modalBackdrop'
 ).addEventListener(
+
   'click',
+
   e=>{
 
     if(
@@ -2061,14 +2403,20 @@ document.getElementById(
     }
 
   }
+
 );
 
 
+/* =========================================================
+   SAVE CONTENT
+========================================================= */
+
 document.getElementById(
   'saveContent'
-).onclick = ()=>{
+).onclick = async ()=>{
 
   const val =
+
     document
       .getElementById(
         'contentInput'
@@ -2093,35 +2441,43 @@ document.getElementById(
   }
 
 
-  save();
-
   closeModal();
 
   renderTasks();
 
+  await save();
+
+
   toast(
+
     val
       ? 'Content saved'
       : 'Content cleared'
+
   );
 
 };
 
 
+/* =========================================================
+   DELETE CONTENT
+========================================================= */
+
 document.getElementById(
   'deleteContent'
-).onclick = ()=>{
+).onclick = async ()=>{
 
   delete contentState[
     currentContentKey
   ];
 
 
-  save();
-
   closeModal();
 
   renderTasks();
+
+  await save();
+
 
   toast(
     'Content deleted'
@@ -2129,6 +2485,10 @@ document.getElementById(
 
 };
 
+
+/* =========================================================
+   TOAST
+========================================================= */
 
 function toast(msg){
 
@@ -2148,16 +2508,22 @@ function toast(msg){
 
 
   setTimeout(
-    ()=>{
+
+    ()=>
       el.classList.remove(
         'show'
-      );
-    },
+      ),
+
     1700
+
   );
 
 }
 
+
+/* =========================================================
+   NAV BUTTONS
+========================================================= */
 
 document.getElementById(
   'todayNav'
@@ -2207,345 +2573,37 @@ document.getElementById(
   );
 
 
+/* =========================================================
+   INITIAL RENDER
+========================================================= */
+
 render();
 
-</script>
-
-
-<!-- ========================================================= -->
-<!-- FIREBASE -->
-<!-- ========================================================= -->
-
-<script type="module">
-
-import {
-  initializeApp
-} from
-"https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-
-
-import {
-  getDatabase,
-  ref,
-  onValue,
-  set
-} from
-"https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
-
-
-import {
-  getAuth,
-  signInAnonymously,
-  onAuthStateChanged
-} from
-"https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-
 
 /* =========================================================
-   FIREBASE CONFIG
-   ========================================================= */
-
-const firebaseConfig = {
-
-  apiKey:
-    "AIzaSyA4KdCgPeKwnkZXDcyqrzTozZo6WF6ueg",
-
-  authDomain:
-    "peermetals-task-tracker.firebaseapp.com",
-
-  databaseURL:
-    "https://peermetals-task-tracker-default-rtdb.firebaseio.com",
-
-  projectId:
-    "peermetals-task-tracker",
-
-  storageBucket:
-    "peermetals-task-tracker.firebasestorage.app",
-
-  messagingSenderId:
-    "1026078145792",
-
-  appId:
-    "1:1026078145792:web:9abad86c0fbd83b75007e5",
-
-  measurementId:
-    "G-YEFX1P0M60"
-
-};
-
-
-/* =========================================================
-   INITIALIZE FIREBASE
-   ========================================================= */
-
-const app =
-  initializeApp(
-    firebaseConfig
-  );
-
-
-const db =
-  getDatabase(app);
-
-
-const auth =
-  getAuth(app);
-
-
-/* =========================================================
-   VARIABLES
-   ========================================================= */
-
-let currentUser =
-  null;
-
-let firebaseReady =
-  false;
-
-let loadingFirebase =
-  false;
-
-
-/* =========================================================
-   SHOW FIREBASE STATUS
-   ========================================================= */
-
-function firebaseToast(message){
-
-  if(
-    typeof toast ===
-    'function'
-  ){
-
-    toast(message);
-
-  }
-
-}
-
-
-/* =========================================================
-   SIGN IN ANONYMOUSLY
-   ========================================================= */
-
-signInAnonymously(auth)
-  .catch(
-    error=>{
-
-      console.error(
-        'Firebase Anonymous Login Error:',
-        error
-      );
-
-
-      firebaseToast(
-        'Firebase login failed'
-      );
-
-    }
-  );
-
-
-/* =========================================================
-   AUTH STATE
-   ========================================================= */
+   FIREBASE AUTHENTICATION
+========================================================= */
 
 onAuthStateChanged(
   auth,
-  user=>{
+  async user=>{
 
-    if(!user){
+    if(user){
 
-      console.log(
-        'No Firebase user'
-      );
+      currentUser =
+        user;
 
-      return;
-
-    }
+      firebaseReady =
+        true;
 
 
-    currentUser =
-      user;
-
-
-    console.log(
-      'Firebase user connected:',
-      user.uid
-    );
-
-
-    firebaseReady =
-      true;
-
-
-    startFirebaseSync();
-
-  }
-);
-
-
-/* =========================================================
-   FIREBASE DATABASE REFERENCE
-   ========================================================= */
-
-function getUserRef(){
-
-  if(!currentUser){
-
-    return null;
-
-  }
-
-
-  return ref(
-    db,
-    `users/${currentUser.uid}`
-  );
-
-}
-
-
-/* =========================================================
-   LOAD FIREBASE DATA
-   ========================================================= */
-
-function startFirebaseSync(){
-
-  if(
-    loadingFirebase
-  ){
-
-    return;
-
-  }
-
-
-  loadingFirebase =
-    true;
-
-
-  const userRef =
-    getUserRef();
-
-
-  if(!userRef){
-
-    return;
-
-  }
-
-
-  onValue(
-    userRef,
-    snapshot=>{
-
-      const data =
-        snapshot.val();
-
-
-      /*
-        If Firebase already has data,
-        use Firebase as the main source.
-      */
-
-      if(data){
-
-        taskState =
-          data.tasks || {};
-
-        contentState =
-          data.content || {};
-
-
-        localStorage.setItem(
-          STORAGE_TASKS,
-          JSON.stringify(
-            taskState
-          )
-        );
-
-
-        localStorage.setItem(
-          STORAGE_CONTENT,
-          JSON.stringify(
-            contentState
-          )
-        );
-
-
-        render();
-
-
-        console.log(
-          'Firebase data loaded'
-        );
-
-
-        return;
-
-      }
-
-
-      /*
-        If Firebase is empty,
-        upload the current localStorage
-        data to Firebase.
-      */
-
-      firebaseSyncSave(
-        taskState,
-        contentState
-      );
-
-    },
-    error=>{
-
-      console.error(
-        'Firebase read error:',
-        error
+      setFirebaseStatus(
+        '✓ Firebase connected',
+        'online'
       );
 
 
-      firebaseToast(
-        'Firebase connection error'
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   SAVE TO FIREBASE
-   ========================================================= */
-
-window.firebaseSyncSave =
-  async function(
-    tasks,
-    content
-  ){
-
-    if(
-      !firebaseReady ||
-      !currentUser
-    ){
-
-      console.log(
-        'Firebase not ready. Saved locally.'
-      );
-
-      return;
-
-    }
-
-
-    const userRef =
-      getUserRef();
-
-
-    if(!userRef){
+      loadFirebaseData();
 
       return;
 
@@ -2554,64 +2612,41 @@ window.firebaseSyncSave =
 
     try{
 
-      await set(
-        userRef,
-        {
-
-          tasks:
-            tasks || {},
-
-          content:
-            content || {},
-
-          updatedAt:
-            Date.now()
-
-        }
+      setFirebaseStatus(
+        'Signing in...'
       );
 
 
-      console.log(
-        'Saved to Firebase'
+      await signInAnonymously(
+        auth
       );
 
-    }
-    catch(error){
+    }catch(error){
 
       console.error(
-        'Firebase save error:',
+        'Firebase authentication error:',
         error
       );
 
 
-      firebaseToast(
-        'Could not save to Firebase'
+      firebaseReady =
+        false;
+
+
+      setFirebaseStatus(
+        'Authentication error',
+        'error'
+      );
+
+
+      toast(
+        'Firebase authentication failed'
       );
 
     }
 
-  };
-
-
-/* =========================================================
-   DEBUG INFO
-   ========================================================= */
-
-window.peerMetalsFirebase = {
-
-  getUser:()=>{
-    return currentUser;
-  },
-
-  getDatabase:()=>{
-    return db;
   }
 
-};
-
-
-console.log(
-  'PeerMetals Firebase initialized'
 );
 
 </script>
