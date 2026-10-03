@@ -222,5 +222,24 @@ document.getElementById('nextMonth').onclick=()=>toast('This tracker is set for 
 
 render();
 </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA4KdCgPeKwnkZXDcyqrzTozZo6WF6ueg",
+    authDomain: "peermetals-task-tracker.firebaseapp.com",
+    databaseURL: "https://peermetals-task-tracker-default-rtdb.firebaseio.com",
+    projectId: "peermetals-task-tracker",
+    storageBucket: "peermetals-task-tracker.firebasestorage.app",
+    messagingSenderId: "1026078145792",
+    appId: "1:1026078145792:web:9abad86c0fbd83b75007e5",
+    measurementId: "G-YEFX1P0M60"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+</script>
+
 </body>
 </html>
