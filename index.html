@@ -53,192 +53,922 @@
 </style>
 </head>
 <body>
+
 <div class="app">
   <aside class="sidebar">
-    <div class="brand"><div class="brand-mark">▦</div><div><div class="brand-name">Peer<span>Metals</span></div><div class="brand-sub">TASK TRACKER</div></div></div>
+    <div class="brand">
+      <div class="brand-mark">▦</div>
+      <div>
+        <div class="brand-name">Peer<span>Metals</span></div>
+        <div class="brand-sub">TASK TRACKER</div>
+      </div>
+    </div>
+
     <div class="calendar-box">
-      <div class="cal-head"><button id="prevMonth">‹</button><span>OCTOBER 2026</span><button id="nextMonth">›</button></div>
+      <div class="cal-head">
+        <button id="prevMonth">‹</button>
+        <span>OCTOBER 2026</span>
+        <button id="nextMonth">›</button>
+      </div>
       <div class="cal-grid" id="miniCalendar"></div>
     </div>
+
     <nav class="nav">
       <button class="active" id="todayNav">☼ &nbsp; Today</button>
       <button id="monthNav">▦ &nbsp; This Month</button>
       <button id="progressNav">▥ &nbsp; Progress</button>
       <button id="settingsNav">⚙ &nbsp; Settings</button>
     </nav>
-    <div class="quote">DISCIPLINE<br>BUILDS<br>WEALTH</div>
+
+    <div class="quote">
+      DISCIPLINE<br>
+      BUILDS<br>
+      WEALTH
+    </div>
   </aside>
 
-  <main class="main"><div class="wrap">
-    <div class="topline">
-      <div><div class="eyebrow" id="eyebrow">OCTOBER 5, 2026</div><h1 id="pageTitle">Monday, October 5, 2026</h1></div>
-      <div class="month-label">— &nbsp; OCTOBER 2026</div>
+  <main class="main">
+    <div class="wrap">
+
+      <div class="topline">
+        <div>
+          <div class="eyebrow" id="eyebrow">OCTOBER 5, 2026</div>
+          <h1 id="pageTitle">Monday, October 5, 2026</h1>
+        </div>
+        <div class="month-label">— &nbsp; OCTOBER 2026</div>
+      </div>
+
+      <div class="date-nav" id="dateNav"></div>
+
+      <section class="progress-card">
+        <div class="progress-ring" id="progressRing">
+          <span id="progressPercent">0%</span>
+        </div>
+
+        <div class="progress-info">
+          <div class="progress-title" id="progressTitle">0 of 17 tasks completed</div>
+          <div class="bar">
+            <div class="bar-fill" id="barFill"></div>
+          </div>
+        </div>
+
+        <div class="motivation">✦ &nbsp; Keep going!</div>
+      </section>
+
+      <div id="taskArea"></div>
+
     </div>
-    <div class="date-nav" id="dateNav"></div>
-
-    <section class="progress-card">
-      <div class="progress-ring" id="progressRing"><span id="progressPercent">0%</span></div>
-      <div class="progress-info"><div class="progress-title" id="progressTitle">0 of 17 tasks completed</div><div class="bar"><div class="bar-fill" id="barFill"></div></div></div>
-      <div class="motivation">✦ &nbsp; Keep going!</div>
-    </section>
-
-    <div id="taskArea"></div>
-  </div></main>
+  </main>
 </div>
 
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal">
-    <div class="modal-head"><div><div class="modal-title" id="modalTitle">Add Content</div><div class="modal-sub" id="modalSub">Monday, October 5 · YouTube · Beginner Video</div></div><button class="close" id="closeModal">×</button></div>
-    <div class="modal-body"><textarea id="contentInput" placeholder="Paste or write your script, caption, post copy, notes, links, or any content here..."></textarea><div class="modal-foot"><button class="delete-content" id="deleteContent">Delete Content</button><button id="cancelModal">Cancel</button><button class="save" id="saveContent">Save Content</button></div></div>
+
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="modalTitle">Add Content</div>
+        <div class="modal-sub" id="modalSub">
+          Monday, October 5 · YouTube · Beginner Video
+        </div>
+      </div>
+
+      <button class="close" id="closeModal">×</button>
+    </div>
+
+    <div class="modal-body">
+      <textarea
+        id="contentInput"
+        placeholder="Paste or write your script, caption, post copy, notes, links, or any content here..."
+      ></textarea>
+
+      <div class="modal-foot">
+        <button class="delete-content" id="deleteContent">Delete Content</button>
+        <button id="cancelModal">Cancel</button>
+        <button class="save" id="saveContent">Save Content</button>
+      </div>
+    </div>
+
   </div>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const weekdays = {
   twitter: {
-    title:'Twitter / X', icon:'X', cls:'twitter', tasks:['Repost Beginner Video','Repost Experienced Stacker Video','1 Educational Post','1 Educational Thread','Reply to Comments','10 Tweets Comments']
+    title:'Twitter / X',
+    icon:'X',
+    cls:'twitter',
+    tasks:[
+      'Repost Beginner Video',
+      'Repost Experienced Stacker Video',
+      '1 Educational Post',
+      '1 Educational Thread',
+      'Reply to Comments',
+      '10 Tweets Comments'
+    ]
   },
+
   youtube: {
-    title:'YouTube', icon:'▶', cls:'youtube', tasks:['Beginner Video','Experienced Stacker Video','1 Poll','1 Product/Sales Post','Reply to All Comments']
+    title:'YouTube',
+    icon:'▶',
+    cls:'youtube',
+    tasks:[
+      'Beginner Video',
+      'Experienced Stacker Video',
+      '1 Poll',
+      '1 Product/Sales Post',
+      'Reply to All Comments'
+    ]
   },
+
   feed: {
-    title:'Feed', icon:'••', cls:'feed', tasks:['1 Feed Post','2 Feed Post','3 Feed Post','Reply To Previous Day Comment','Send DM If Necessary']
+    title:'Feed',
+    icon:'••',
+    cls:'feed',
+    tasks:[
+      '1 Feed Post',
+      '2 Feed Post',
+      '3 Feed Post',
+      'Reply To Previous Day Comment',
+      'Send DM If Necessary'
+    ]
   },
+
   emails: {
-    title:'Emails', icon:'✉', cls:'emails', tasks:['1 Regular Email']
+    title:'Emails',
+    icon:'✉',
+    cls:'emails',
+    tasks:[
+      '1 Regular Email'
+    ]
   }
 };
-const weekend = {title:'Weekend Email',icon:'✉',cls:'weekend',tasks:['Weekend Email']};
 
-const startDate = new Date(2026,9,5); // Oct 5
+const weekend = {
+  title:'Weekend Email',
+  icon:'✉',
+  cls:'weekend',
+  tasks:[
+    'Weekend Email'
+  ]
+};
+
+const startDate = new Date(2026,9,5);
 const endDate = new Date(2026,9,31);
+
 const dates=[];
-for(let d=new Date(startDate); d<=endDate; d.setDate(d.getDate()+1)) dates.push(new Date(d));
-let selectedKey = '2026-10-05';
-let currentContentKey = null;
+
+for(
+  let d=new Date(startDate);
+  d<=endDate;
+  d.setDate(d.getDate()+1)
+){
+  dates.push(new Date(d));
+}
+
+let selectedKey='2026-10-05';
+let currentContentKey=null;
+
 const STORAGE_TASKS='peermetals_task_tracker_v1';
 const STORAGE_CONTENT='peermetals_content_v1';
-let taskState = JSON.parse(localStorage.getItem(STORAGE_TASKS)||'{}');
-let contentState = JSON.parse(localStorage.getItem(STORAGE_CONTENT)||'{}');
 
-function keyForDate(date){return date.toISOString().slice(0,10)}
-function dateFromKey(key){const [y,m,d]=key.split('-').map(Number);return new Date(y,m-1,d)}
-function fmtLong(date){return date.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
-function fmtShort(date){return date.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
-function isWeekendEmailDay(date){return date.getDay()===6}
-function isSunday(date){return date.getDay()===0}
-function taskKey(dateKey, section, task){return `${dateKey}__${section}__${task}`}
+let taskState=JSON.parse(
+  localStorage.getItem(STORAGE_TASKS)||'{}'
+);
+
+let contentState=JSON.parse(
+  localStorage.getItem(STORAGE_CONTENT)||'{}'
+);
+
+function keyForDate(date){
+  return date.toISOString().slice(0,10);
+}
+
+function dateFromKey(key){
+  const [y,m,d]=key.split('-').map(Number);
+  return new Date(y,m-1,d);
+}
+
+function fmtLong(date){
+  return date.toLocaleDateString(
+    'en-US',
+    {
+      weekday:'long',
+      month:'long',
+      day:'numeric',
+      year:'numeric'
+    }
+  );
+}
+
+function isWeekendEmailDay(date){
+  return date.getDay()===6;
+}
+
+function isSunday(date){
+  return date.getDay()===0;
+}
+
+function taskKey(dateKey,section,task){
+  return `${dateKey}__${section}__${task}`;
+}
+
 function getSections(date){
-  if(isSunday(date)) return [];
-  if(isWeekendEmailDay(date)) return [{...weekend,id:'weekend'}];
-  return Object.entries(weekdays).map(([id,s])=>({...s,id}));
-}
-function getTasks(dateKey){return getSections(dateFromKey(dateKey)).flatMap(s=>s.tasks.map(t=>taskKey(dateKey,s.id,t)))}
 
-function save(){localStorage.setItem(STORAGE_TASKS,JSON.stringify(taskState));localStorage.setItem(STORAGE_CONTENT,JSON.stringify(contentState))}
-function renderMiniCalendar(){
-  const el=document.getElementById('miniCalendar');
-  const heads=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  el.innerHTML=heads.map(x=>`<div class="dow">${x[0]}</div>`).join('');
-  const first=new Date(2026,9,1); let mondayOffset=(first.getDay()+6)%7;
-  for(let i=0;i<mondayOffset;i++) el.innerHTML+=`<div></div>`;
-  for(let d=1;d<=31;d++){
-    const date=new Date(2026,9,d), key=keyForDate(date);
-    el.innerHTML+=`<button class="cal-day ${key===selectedKey?'active':''}" data-key="${key}">${d}</button>`;
+  if(isSunday(date)){
+    return [];
   }
-  el.querySelectorAll('.cal-day').forEach(b=>b.onclick=()=>selectDate(b.dataset.key));
+
+  if(isWeekendEmailDay(date)){
+    return [
+      {
+        ...weekend,
+        id:'weekend'
+      }
+    ];
+  }
+
+  return Object.entries(weekdays).map(
+    ([id,s])=>({
+      ...s,
+      id
+    })
+  );
 }
+
+function getTasks(dateKey){
+  return getSections(
+    dateFromKey(dateKey)
+  ).flatMap(
+    s=>s.tasks.map(
+      t=>taskKey(dateKey,s.id,t)
+    )
+  );
+}
+
+function save(){
+
+  localStorage.setItem(
+    STORAGE_TASKS,
+    JSON.stringify(taskState)
+  );
+
+  localStorage.setItem(
+    STORAGE_CONTENT,
+    JSON.stringify(contentState)
+  );
+}
+
+function renderMiniCalendar(){
+
+  const el=document.getElementById('miniCalendar');
+
+  const heads=[
+    'Mon','Tue','Wed','Thu',
+    'Fri','Sat','Sun'
+  ];
+
+  el.innerHTML=heads
+    .map(x=>`<div class="dow">${x[0]}</div>`)
+    .join('');
+
+  const first=new Date(2026,9,1);
+
+  const mondayOffset=
+    (first.getDay()+6)%7;
+
+  for(
+    let i=0;
+    i<mondayOffset;
+    i++
+  ){
+    el.innerHTML+=`<div></div>`;
+  }
+
+  for(
+    let d=1;
+    d<=31;
+    d++
+  ){
+
+    const date=new Date(2026,9,d);
+
+    const key=keyForDate(date);
+
+    el.innerHTML+=`
+      <button
+        class="cal-day ${key===selectedKey?'active':''}"
+        data-key="${key}"
+      >
+        ${d}
+      </button>
+    `;
+  }
+
+  el.querySelectorAll('.cal-day')
+    .forEach(
+      b=>b.onclick=()=>selectDate(b.dataset.key)
+    );
+}
+
 function renderDateNav(){
+
   const el=document.getElementById('dateNav');
-  el.innerHTML=dates.map(date=>{const key=keyForDate(date);return `<button class="date-btn ${key===selectedKey?'active':''}" data-key="${key}"><strong>${date.getDate()}</strong><span>${date.toLocaleDateString('en-US',{weekday:'short'})}</span></button>`}).join('');
-  el.querySelectorAll('.date-btn').forEach(b=>b.onclick=()=>selectDate(b.dataset.key));
-  const active=el.querySelector('.active'); if(active) active.scrollIntoView({inline:'center',behavior:'smooth',block:'nearest'});
+
+  el.innerHTML=dates.map(
+    date=>{
+
+      const key=keyForDate(date);
+
+      return `
+        <button
+          class="date-btn ${key===selectedKey?'active':''}"
+          data-key="${key}"
+        >
+          <strong>${date.getDate()}</strong>
+          <span>
+            ${date.toLocaleDateString(
+              'en-US',
+              {weekday:'short'}
+            )}
+          </span>
+        </button>
+      `;
+    }
+  ).join('');
+
+  el.querySelectorAll('.date-btn')
+    .forEach(
+      b=>b.onclick=()=>selectDate(b.dataset.key)
+    );
+
+  const active=el.querySelector('.active');
+
+  if(active){
+    active.scrollIntoView({
+      inline:'center',
+      behavior:'smooth',
+      block:'nearest'
+    });
+  }
 }
+
 function render(){
+
   const date=dateFromKey(selectedKey);
-  document.getElementById('eyebrow').textContent=date.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}).toUpperCase();
-  document.getElementById('pageTitle').textContent=fmtLong(date);
-  renderDateNav(); renderMiniCalendar(); renderTasks(); updateProgress();
+
+  document.getElementById('eyebrow')
+    .textContent=
+      date.toLocaleDateString(
+        'en-US',
+        {
+          month:'long',
+          day:'numeric',
+          year:'numeric'
+        }
+      ).toUpperCase();
+
+  document.getElementById('pageTitle')
+    .textContent=fmtLong(date);
+
+  renderDateNav();
+  renderMiniCalendar();
+  renderTasks();
+  updateProgress();
 }
+
 function renderTasks(){
-  const date=dateFromKey(selectedKey), area=document.getElementById('taskArea');
+
+  const date=dateFromKey(selectedKey);
+
+  const area=document.getElementById('taskArea');
+
   const sections=getSections(date);
-  if(!sections.length){area.innerHTML=`<div class="empty"><strong>No scheduled tasks.</strong><br><span>Sunday is intentionally kept clear.</span></div>`;return;}
-  area.innerHTML=`<div class="cards">${sections.map(section=>{
-    const count=section.tasks.length;
-    return `<section class="card ${section.cls} ${section.id==='weekend'?'weekend-card':''}">
-      <div class="card-head"><div class="section-title"><span class="section-icon">${section.icon}</span>${section.title}</div><span class="section-count" id="count-${section.id}">0 / ${count}</span></div>
-      ${section.id==='weekend'?'<div class="weekend-note">Saturday special task — nothing else is scheduled today.</div>':''}
-      <div class="tasks">${section.tasks.map(task=>{
-        const tk=taskKey(selectedKey,section.id,task); const checked=!!taskState[tk]; const has=!!contentState[tk];
-        return `<label class="task ${checked?'done':''}" data-task-key="${escapeAttr(tk)}"><input class="check" type="checkbox" ${checked?'checked':''}><span class="task-label">${escapeHtml(task)}</span><button type="button" class="content-btn ${has?'has-content':''}" data-content-key="${escapeAttr(tk)}">${has?'View Content':'＋ Content'}</button></label>`
-      }).join('')}</div>
-    </section>`;
-  }).join('')}</div><button class="reset" id="resetDay">↻ &nbsp; Reset This Day</button>`;
-  area.querySelectorAll('.check').forEach(cb=>cb.addEventListener('change',e=>{
-    const tk=e.target.closest('.task').dataset.taskKey;
-    if(e.target.checked) taskState[tk]=true; else delete taskState[tk]; save(); renderTasks(); updateProgress();
-  }));
-  area.querySelectorAll('.content-btn').forEach(btn=>btn.addEventListener('click',()=>openContent(btn.dataset.contentKey)));
-  document.getElementById('resetDay').onclick=()=>{getTasks(selectedKey).forEach(t=>{delete taskState[t];});save();render();toast('Day reset');};
+
+  if(!sections.length){
+
+    area.innerHTML=`
+      <div class="empty">
+        <strong>No scheduled tasks.</strong>
+        <br>
+        <span>Sunday is intentionally kept clear.</span>
+      </div>
+    `;
+
+    return;
+  }
+
+  area.innerHTML=`
+    <div class="cards">
+
+      ${sections.map(section=>{
+
+        const count=section.tasks.length;
+
+        return `
+          <section
+            class="card ${section.cls}
+            ${section.id==='weekend'?'weekend-card':''}"
+          >
+
+            <div class="card-head">
+
+              <div class="section-title">
+
+                <span class="section-icon">
+                  ${section.icon}
+                </span>
+
+                ${section.title}
+
+              </div>
+
+              <span
+                class="section-count"
+                id="count-${section.id}"
+              >
+                0 / ${count}
+              </span>
+
+            </div>
+
+            ${
+              section.id==='weekend'
+              ?
+              `
+                <div class="weekend-note">
+                  Saturday special task — nothing else is scheduled today.
+                </div>
+              `
+              :
+              ''
+            }
+
+            <div class="tasks">
+
+              ${section.tasks.map(task=>{
+
+                const tk=
+                  taskKey(
+                    selectedKey,
+                    section.id,
+                    task
+                  );
+
+                const checked=
+                  !!taskState[tk];
+
+                const has=
+                  !!contentState[tk];
+
+                return `
+                  <label
+                    class="task ${checked?'done':''}"
+                    data-task-key="${escapeAttr(tk)}"
+                  >
+
+                    <input
+                      class="check"
+                      type="checkbox"
+                      ${checked?'checked':''}
+                    >
+
+                    <span class="task-label">
+                      ${escapeHtml(task)}
+                    </span>
+
+                    <button
+                      type="button"
+                      class="content-btn ${has?'has-content':''}"
+                      data-content-key="${escapeAttr(tk)}"
+                    >
+                      ${has?'View Content':'＋ Content'}
+                    </button>
+
+                  </label>
+                `;
+
+              }).join('')}
+
+            </div>
+
+          </section>
+        `;
+
+      }).join('')}
+
+    </div>
+
+    <button
+      class="reset"
+      id="resetDay"
+    >
+      ↻ &nbsp; Reset This Day
+    </button>
+  `;
+
+  area.querySelectorAll('.check')
+    .forEach(
+      cb=>cb.addEventListener(
+        'change',
+        e=>{
+
+          const tk=
+            e.target
+              .closest('.task')
+              .dataset.taskKey;
+
+          if(e.target.checked){
+            taskState[tk]=true;
+          }else{
+            delete taskState[tk];
+          }
+
+          save();
+
+          renderTasks();
+
+          updateProgress();
+        }
+      )
+    );
+
+  area.querySelectorAll('.content-btn')
+    .forEach(
+      btn=>btn.addEventListener(
+        'click',
+        ()=>openContent(
+          btn.dataset.contentKey
+        )
+      )
+    );
+
+  document.getElementById('resetDay')
+    .onclick=()=>{
+
+      getTasks(selectedKey)
+        .forEach(
+          t=>{
+            delete taskState[t];
+          }
+        );
+
+      save();
+
+      render();
+
+      toast('Day reset');
+    };
+
   updateSectionCounts();
 }
+
 function updateSectionCounts(){
+
   const date=dateFromKey(selectedKey);
-  getSections(date).forEach(s=>{const el=document.getElementById('count-'+s.id);if(!el)return;const done=s.tasks.filter(t=>taskState[taskKey(selectedKey,s.id,t)]).length;el.textContent=`${done} / ${s.tasks.length}`});
+
+  getSections(date)
+    .forEach(
+      s=>{
+
+        const el=
+          document.getElementById(
+            'count-'+s.id
+          );
+
+        if(!el)return;
+
+        const done=
+          s.tasks.filter(
+            t=>
+              taskState[
+                taskKey(
+                  selectedKey,
+                  s.id,
+                  t
+                )
+              ]
+          ).length;
+
+        el.textContent=
+          `${done} / ${s.tasks.length}`;
+      }
+    );
 }
+
 function updateProgress(){
-  const tasks=getTasks(selectedKey), total=tasks.length, done=tasks.filter(t=>taskState[t]).length, pct=total?Math.round(done/total*100):0;
-  document.getElementById('progressPercent').textContent=pct+'%';document.getElementById('progressTitle').textContent=`${done} of ${total} tasks completed`;document.getElementById('barFill').style.width=pct+'%';document.getElementById('progressRing').style.background=`conic-gradient(var(--gold) ${pct*3.6}deg,#e6e3dd 0deg)`;
+
+  const tasks=getTasks(selectedKey);
+
+  const total=tasks.length;
+
+  const done=
+    tasks.filter(
+      t=>taskState[t]
+    ).length;
+
+  const pct=
+    total
+      ? Math.round(done/total*100)
+      : 0;
+
+  document.getElementById(
+    'progressPercent'
+  ).textContent=pct+'%';
+
+  document.getElementById(
+    'progressTitle'
+  ).textContent=
+    `${done} of ${total} tasks completed`;
+
+  document.getElementById(
+    'barFill'
+  ).style.width=pct+'%';
+
+  document.getElementById(
+    'progressRing'
+  ).style.background=
+    `conic-gradient(
+      var(--gold)
+      ${pct*3.6}deg,
+      #e6e3dd 0deg
+    )`;
 }
-function selectDate(key){if(!dates.some(d=>keyForDate(d)===key))return;selectedKey=key;render();window.scrollTo({top:0,behavior:'smooth'})}
-function escapeHtml(s){return s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function escapeAttr(s){return escapeHtml(s)}
+
+function selectDate(key){
+
+  if(
+    !dates.some(
+      d=>keyForDate(d)===key
+    )
+  ){
+    return;
+  }
+
+  selectedKey=key;
+
+  render();
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
+}
+
+function escapeHtml(s){
+
+  return s.replace(
+    /[&<>'"]/g,
+    c=>({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      "'":'&#39;',
+      '"':'&quot;'
+    }[c])
+  );
+}
+
+function escapeAttr(s){
+  return escapeHtml(s);
+}
 
 function openContent(tk){
+
   currentContentKey=tk;
-  const parts=tk.split('__'); const dateKey=parts[0], section=parts[1], task=parts.slice(2).join('__');
-  const date=dateFromKey(dateKey); const sectionObj=getSections(date).find(s=>s.id===section);
-  document.getElementById('modalTitle').textContent=contentState[tk]?'Edit Content':'Add Content';
-  document.getElementById('modalSub').textContent=`${fmtLong(date)} · ${sectionObj?sectionObj.title:section} · ${task}`;
-  document.getElementById('contentInput').value=contentState[tk]||'';
-  document.getElementById('deleteContent').style.display=contentState[tk]?'block':'none';
-  document.getElementById('modalBackdrop').classList.add('open');
-  setTimeout(()=>document.getElementById('contentInput').focus(),50);
+
+  const parts=tk.split('__');
+
+  const dateKey=parts[0];
+  const section=parts[1];
+  const task=parts.slice(2).join('__');
+
+  const date=dateFromKey(dateKey);
+
+  const sectionObj=
+    getSections(date)
+      .find(
+        s=>s.id===section
+      );
+
+  document.getElementById(
+    'modalTitle'
+  ).textContent=
+    contentState[tk]
+      ? 'Edit Content'
+      : 'Add Content';
+
+  document.getElementById(
+    'modalSub'
+  ).textContent=
+    `${fmtLong(date)} · ${
+      sectionObj
+        ? sectionObj.title
+        : section
+    } · ${task}`;
+
+  document.getElementById(
+    'contentInput'
+  ).value=
+    contentState[tk]||'';
+
+  document.getElementById(
+    'deleteContent'
+  ).style.display=
+    contentState[tk]
+      ? 'block'
+      : 'none';
+
+  document.getElementById(
+    'modalBackdrop'
+  ).classList.add('open');
+
+  setTimeout(
+    ()=>document
+      .getElementById('contentInput')
+      .focus(),
+    50
+  );
 }
-function closeModal(){document.getElementById('modalBackdrop').classList.remove('open');currentContentKey=null}
-document.getElementById('closeModal').onclick=closeModal;document.getElementById('cancelModal').onclick=closeModal;
-document.getElementById('modalBackdrop').addEventListener('click',e=>{if(e.target.id==='modalBackdrop')closeModal()});
-document.getElementById('saveContent').onclick=()=>{const val=document.getElementById('contentInput').value.trim();if(val)contentState[currentContentKey]=val;else delete contentState[currentContentKey];save();closeModal();renderTasks();toast(val?'Content saved':'Content cleared')};
-document.getElementById('deleteContent').onclick=()=>{delete contentState[currentContentKey];save();closeModal();renderTasks();toast('Content deleted')};
-function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1700)}
-document.getElementById('todayNav').onclick=()=>selectDate('2026-10-05');
-document.getElementById('monthNav').onclick=()=>selectDate('2026-10-05');
-document.getElementById('progressNav').onclick=()=>toast('Progress is shown for the selected day');
-document.getElementById('settingsNav').onclick=()=>toast('Settings are not needed for the current tracker');
-document.getElementById('prevMonth').onclick=()=>toast('This tracker is set for October 2026');
-document.getElementById('nextMonth').onclick=()=>toast('This tracker is set for October 2026');
+
+function closeModal(){
+
+  document.getElementById(
+    'modalBackdrop'
+  ).classList.remove('open');
+
+  currentContentKey=null;
+}
+
+document.getElementById(
+  'closeModal'
+).onclick=closeModal;
+
+document.getElementById(
+  'cancelModal'
+).onclick=closeModal;
+
+document.getElementById(
+  'modalBackdrop'
+).addEventListener(
+  'click',
+  e=>{
+    if(
+      e.target.id==='modalBackdrop'
+    ){
+      closeModal();
+    }
+  }
+);
+
+document.getElementById(
+  'saveContent'
+).onclick=()=>{
+
+  const val=
+    document
+      .getElementById('contentInput')
+      .value
+      .trim();
+
+  if(val){
+    contentState[
+      currentContentKey
+    ]=val;
+  }else{
+    delete contentState[
+      currentContentKey
+    ];
+  }
+
+  save();
+
+  closeModal();
+
+  renderTasks();
+
+  toast(
+    val
+      ? 'Content saved'
+      : 'Content cleared'
+  );
+};
+
+document.getElementById(
+  'deleteContent'
+).onclick=()=>{
+
+  delete contentState[
+    currentContentKey
+  ];
+
+  save();
+
+  closeModal();
+
+  renderTasks();
+
+  toast('Content deleted');
+};
+
+function toast(msg){
+
+  const el=
+    document.getElementById('toast');
+
+  el.textContent=msg;
+
+  el.classList.add('show');
+
+  setTimeout(
+    ()=>el.classList.remove('show'),
+    1700
+  );
+}
+
+document.getElementById(
+  'todayNav'
+).onclick=()=>selectDate(
+  '2026-10-05'
+);
+
+document.getElementById(
+  'monthNav'
+).onclick=()=>selectDate(
+  '2026-10-05'
+);
+
+document.getElementById(
+  'progressNav'
+).onclick=()=>toast(
+  'Progress is shown for the selected day'
+);
+
+document.getElementById(
+  'settingsNav'
+).onclick=()=>toast(
+  'Settings are not needed for the current tracker'
+);
+
+document.getElementById(
+  'prevMonth'
+).onclick=()=>toast(
+  'This tracker is set for October 2026'
+);
+
+document.getElementById(
+  'nextMonth'
+).onclick=()=>toast(
+  'This tracker is set for October 2026'
+);
 
 render();
 </script>
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-  import { getDatabase } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyA4KdCgPeKwnkZXDcyqrzTozZo6WF6ueg",
-    authDomain: "peermetals-task-tracker.firebaseapp.com",
-    databaseURL: "https://peermetals-task-tracker-default-rtdb.firebaseio.com",
-    projectId: "peermetals-task-tracker",
-    storageBucket: "peermetals-task-tracker.firebasestorage.app",
-    messagingSenderId: "1026078145792",
-    appId: "1:1026078145792:web:9abad86c0fbd83b75007e5",
-    measurementId: "G-YEFX1P0M60"
-  };
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+import {
+  getDatabase
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyA4KdCgPeKwnkZXDcyqrzTozZo6WF6ueg",
+
+  authDomain:
+    "peermetals-task-tracker.firebaseapp.com",
+
+  databaseURL:
+    "https://peermetals-task-tracker-default-rtdb.firebaseio.com",
+
+  projectId:
+    "peermetals-task-tracker",
+
+  storageBucket:
+    "peermetals-task-tracker.firebasestorage.app",
+
+  messagingSenderId:
+    "1026078145792",
+
+  appId:
+    "1:1026078145792:web:9abad86c0fbd83b75007e5",
+
+  measurementId:
+    "G-YEFX1P0M60"
+};
+
+const app =
+  initializeApp(firebaseConfig);
+
+const db =
+  getDatabase(app);
+
 </script>
 
 </body>
