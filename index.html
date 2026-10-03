@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PeerMetals Task Tracker</title>
+
 <style>
   :root{
     --bg:#f6f5f1;
@@ -17,67 +18,699 @@
     --gold-soft:#f5ead4;
     --shadow:0 12px 30px rgba(32,29,22,.07);
   }
+
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
+  }
+
   button,input,textarea{font:inherit}
   button{cursor:pointer}
-  .app{min-height:100vh;display:flex}
-  .sidebar{width:235px;background:var(--sidebar);border-right:1px solid var(--line);padding:28px 22px;position:fixed;left:0;top:0;bottom:0}
-  .brand{display:flex;align-items:center;gap:10px;margin:4px 6px 34px}
-  .brand-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,#d9ae5b,#b98228);display:grid;place-items:center;color:#fff;font-size:14px;box-shadow:0 5px 12px rgba(180,130,45,.2)}
-  .brand-name{font-weight:800;font-size:16px;letter-spacing:-.4px}.brand-name span{color:var(--gold-dark)}
-  .brand-sub{font-size:8px;letter-spacing:3px;color:#77736b;margin-top:3px}
-  .calendar-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:18px}
-  .cal-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;margin-bottom:12px}
-  .cal-head button{border:0;background:transparent;color:#777;width:24px;height:24px;border-radius:50%}.cal-head button:hover{background:#f1eee7}
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;font-size:9px;color:#777}
-  .cal-grid .dow{font-weight:700;color:#8b877f}.cal-day{height:22px;display:grid;place-items:center;border-radius:7px}.cal-day.active{background:var(--gold);color:white;font-weight:800}.cal-day.today{outline:1px solid #d8c7a6}
-  .nav{display:flex;flex-direction:column;gap:6px}.nav button{border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:10px;color:#4f4c46;font-size:13px}.nav button.active,.nav button:hover{background:var(--gold-soft);color:#8b6424}
-  .quote{position:absolute;left:32px;bottom:90px;border-left:2px solid #d4a955;padding-left:14px;color:#99938a;font-size:9px;letter-spacing:3px;line-height:1.8}
-  .main{margin-left:235px;flex:1;padding:30px 38px 70px}
-  .wrap{max-width:1090px;margin:0 auto}
-  .topline{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
-  .eyebrow{font-size:9px;letter-spacing:4px;color:#9b968e;text-transform:uppercase;margin-bottom:12px}.month-label{font-size:9px;letter-spacing:4px;color:#9b968e;margin-top:7px}
-  h1{font-size:36px;letter-spacing:-1.8px;margin:0;font-weight:800}.date-nav{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin-bottom:18px;scrollbar-width:none}.date-nav::-webkit-scrollbar{display:none}
-  .date-btn{min-width:56px;height:44px;border-radius:12px;border:1px solid var(--line);background:#fff;color:#444;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;flex:0 0 auto}.date-btn strong{font-size:12px}.date-btn span{font-size:9px;color:#777;margin-top:3px}.date-btn.active{background:var(--gold);border-color:var(--gold);color:#fff;box-shadow:0 5px 14px rgba(194,145,56,.22)}.date-btn.active span{color:#fff}
-  .progress-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:19px 23px;box-shadow:var(--shadow);display:flex;align-items:center;gap:20px;margin-bottom:22px}.progress-ring{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--gold) 0deg,#e6e3dd 0deg);position:relative;flex:0 0 auto}.progress-ring:after{content:"";position:absolute;inset:7px;background:#fff;border-radius:50%}.progress-ring span{position:relative;z-index:1;font-weight:800;font-size:13px}.progress-info{flex:1}.progress-title{font-size:14px;font-weight:800;margin-bottom:10px}.bar{height:8px;background:#e7e5e1;border-radius:99px;overflow:hidden}.bar-fill{height:100%;width:0;background:var(--gold);border-radius:99px;transition:.2s}.motivation{background:var(--gold-soft);color:#8a6323;border-radius:10px;padding:9px 13px;font-size:10px;font-weight:700;white-space:nowrap}
-  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:19px 22px;box-shadow:var(--shadow)}.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}.section-title{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800}.section-icon{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900}.twitter .section-icon{background:#e8f0ff;color:#1476d4}.youtube .section-icon{background:#fff0f1;color:#e31b23}.feed .section-icon{background:#e6f7f3;color:#18977f}.emails .section-icon{background:#efefff;color:#665ce8}.section-count{font-size:10px;color:#888}
-  .tasks{display:flex;flex-direction:column;gap:0}.task{display:flex;align-items:center;gap:10px;min-height:30px;padding:3px 0}.check{width:17px;height:17px;border:1.5px solid #bbb8b0;border-radius:3px;appearance:none;background:#fff;flex:0 0 auto;position:relative}.check:checked{background:#222;border-color:#222}.check:checked:after{content:"✓";color:#fff;font-size:11px;position:absolute;left:3px;top:-1px}.task.done .task-label{text-decoration:line-through;color:#aaa}.task-label{font-size:12px;line-height:1.3;flex:1}.content-btn{border:1px solid #e3dfd6;background:#faf9f6;color:#8b6424;border-radius:7px;padding:4px 7px;font-size:9px;white-space:nowrap}.content-btn:hover{background:var(--gold-soft);border-color:#e1c995}.content-btn.has-content{background:#f5ead4;border-color:#e1c995;font-weight:700}
-  .weekend{grid-column:1/-1}.weekend .section-icon{background:var(--gold-soft);color:#9a6d20}.weekend-card{padding-bottom:20px}.weekend-note{font-size:11px;color:#77736b;margin-top:-5px;margin-bottom:12px}
-  .reset{display:block;margin:18px auto 0;border:1px solid #dfd8c9;background:#fff;border-radius:20px;padding:8px 15px;font-size:10px;color:#625d54}.reset:hover{background:#faf7ef}
-  .empty{background:#fff;border:1px solid var(--line);border-radius:18px;padding:55px;text-align:center;color:#8d8981;box-shadow:var(--shadow)}
-  .modal-backdrop{position:fixed;inset:0;background:rgba(20,18,14,.38);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal-backdrop.open{display:flex}.modal{width:min(680px,100%);background:#fff;border-radius:20px;box-shadow:0 25px 70px rgba(0,0,0,.2);overflow:hidden}.modal-head{padding:18px 21px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-title{font-weight:800;font-size:15px}.modal-sub{font-size:10px;color:#8a857c;margin-top:3px}.close{border:0;background:#f5f3ee;border-radius:50%;width:30px;height:30px;font-size:17px;color:#666}.modal-body{padding:18px 21px}.modal textarea{width:100%;min-height:330px;border:1px solid #ddd9d0;border-radius:12px;padding:14px;resize:vertical;outline:none;font-size:13px;line-height:1.55;color:#222}.modal textarea:focus{border-color:#caa45e;box-shadow:0 0 0 3px rgba(201,153,63,.1)}.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.modal-foot button{border-radius:9px;padding:9px 14px;border:1px solid #ddd8cf;background:#fff;font-size:11px}.save{background:#b98935!important;border-color:#b98935!important;color:#fff}.delete-content{margin-right:auto;color:#a94b3e!important}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;border-radius:10px;padding:9px 13px;font-size:11px;opacity:0;pointer-events:none;transition:.25s;z-index:100}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-  @media(max-width:900px){.sidebar{display:none}.main{margin-left:0;padding:22px 16px 50px}.cards{grid-template-columns:1fr}h1{font-size:30px}.month-label{display:none}}
-  @media(max-width:560px){.progress-card{align-items:flex-start}.motivation{display:none}.date-nav{margin-right:-16px}.card{padding:16px}.task-label{font-size:11px}.content-btn{font-size:8px;padding:4px 6px}}
+
+  .app{
+    min-height:100vh;
+    display:flex
+  }
+
+  .sidebar{
+    width:235px;
+    background:var(--sidebar);
+    border-right:1px solid var(--line);
+    padding:28px 22px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:4px 6px 34px
+  }
+
+  .brand-mark{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    background:linear-gradient(145deg,#d9ae5b,#b98228);
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font-size:14px;
+    box-shadow:0 5px 12px rgba(180,130,45,.2)
+  }
+
+  .brand-name{
+    font-weight:800;
+    font-size:16px;
+    letter-spacing:-.4px
+  }
+
+  .brand-name span{color:var(--gold-dark)}
+
+  .brand-sub{
+    font-size:8px;
+    letter-spacing:3px;
+    color:#77736b;
+    margin-top:3px
+  }
+
+  .calendar-box{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:14px;
+    margin-bottom:18px
+  }
+
+  .cal-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:12px
+  }
+
+  .cal-head button{
+    border:0;
+    background:transparent;
+    color:#777;
+    width:24px;
+    height:24px;
+    border-radius:50%
+  }
+
+  .cal-head button:hover{background:#f1eee7}
+
+  .cal-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:6px;
+    text-align:center;
+    font-size:9px;
+    color:#777
+  }
+
+  .cal-grid .dow{
+    font-weight:700;
+    color:#8b877f
+  }
+
+  .cal-day{
+    height:22px;
+    display:grid;
+    place-items:center;
+    border-radius:7px;
+    border:0;
+    background:transparent
+  }
+
+  .cal-day.active{
+    background:var(--gold);
+    color:white;
+    font-weight:800
+  }
+
+  .nav{
+    display:flex;
+    flex-direction:column;
+    gap:6px
+  }
+
+  .nav button{
+    border:0;
+    background:transparent;
+    text-align:left;
+    padding:11px 12px;
+    border-radius:10px;
+    color:#4f4c46;
+    font-size:13px
+  }
+
+  .nav button.active,
+  .nav button:hover{
+    background:var(--gold-soft);
+    color:#8b6424
+  }
+
+  .quote{
+    position:absolute;
+    left:32px;
+    bottom:90px;
+    border-left:2px solid #d4a955;
+    padding-left:14px;
+    color:#99938a;
+    font-size:9px;
+    letter-spacing:3px;
+    line-height:1.8
+  }
+
+  .main{
+    margin-left:235px;
+    flex:1;
+    padding:30px 38px 70px
+  }
+
+  .wrap{
+    max-width:1090px;
+    margin:0 auto
+  }
+
+  .topline{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:20px
+  }
+
+  .eyebrow{
+    font-size:9px;
+    letter-spacing:4px;
+    color:#9b968e;
+    text-transform:uppercase;
+    margin-bottom:12px
+  }
+
+  .month-label{
+    font-size:9px;
+    letter-spacing:4px;
+    color:#9b968e;
+    margin-top:7px
+  }
+
+  h1{
+    font-size:36px;
+    letter-spacing:-1.8px;
+    margin:0;
+    font-weight:800
+  }
+
+  .date-nav{
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    padding-bottom:6px;
+    margin-bottom:18px;
+    scrollbar-width:none
+  }
+
+  .date-nav::-webkit-scrollbar{display:none}
+
+  .date-btn{
+    min-width:56px;
+    height:44px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:#444;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    line-height:1.1;
+    flex:0 0 auto
+  }
+
+  .date-btn strong{font-size:12px}
+
+  .date-btn span{
+    font-size:9px;
+    color:#777;
+    margin-top:3px
+  }
+
+  .date-btn.active{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#fff;
+    box-shadow:0 5px 14px rgba(194,145,56,.22)
+  }
+
+  .date-btn.active span{color:#fff}
+
+  .progress-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:19px 23px;
+    box-shadow:var(--shadow);
+    display:flex;
+    align-items:center;
+    gap:20px;
+    margin-bottom:22px
+  }
+
+  .progress-ring{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:conic-gradient(var(--gold) 0deg,#e6e3dd 0deg);
+    position:relative;
+    flex:0 0 auto
+  }
+
+  .progress-ring:after{
+    content:"";
+    position:absolute;
+    inset:7px;
+    background:#fff;
+    border-radius:50%
+  }
+
+  .progress-ring span{
+    position:relative;
+    z-index:1;
+    font-weight:800;
+    font-size:13px
+  }
+
+  .progress-info{flex:1}
+
+  .progress-title{
+    font-size:14px;
+    font-weight:800;
+    margin-bottom:10px
+  }
+
+  .bar{
+    height:8px;
+    background:#e7e5e1;
+    border-radius:99px;
+    overflow:hidden
+  }
+
+  .bar-fill{
+    height:100%;
+    width:0;
+    background:var(--gold);
+    border-radius:99px;
+    transition:.2s
+  }
+
+  .motivation{
+    background:var(--gold-soft);
+    color:#8a6323;
+    border-radius:10px;
+    padding:9px 13px;
+    font-size:10px;
+    font-weight:700;
+    white-space:nowrap
+  }
+
+  .cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px
+  }
+
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:17px;
+    padding:19px 22px;
+    box-shadow:var(--shadow)
+  }
+
+  .card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:13px
+  }
+
+  .section-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:15px;
+    font-weight:800
+  }
+
+  .section-icon{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    font-size:12px;
+    font-weight:900
+  }
+
+  .twitter .section-icon{
+    background:#e8f0ff;
+    color:#1476d4
+  }
+
+  .youtube .section-icon{
+    background:#fff0f1;
+    color:#e31b23
+  }
+
+  .feed .section-icon{
+    background:#e6f7f3;
+    color:#18977f
+  }
+
+  .emails .section-icon{
+    background:#efefff;
+    color:#665ce8
+  }
+
+  .section-count{
+    font-size:10px;
+    color:#888
+  }
+
+  .tasks{
+    display:flex;
+    flex-direction:column;
+    gap:0
+  }
+
+  .task{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height:30px;
+    padding:3px 0
+  }
+
+  .check{
+    width:17px;
+    height:17px;
+    border:1.5px solid #bbb8b0;
+    border-radius:3px;
+    appearance:none;
+    background:#fff;
+    flex:0 0 auto;
+    position:relative
+  }
+
+  .check:checked{
+    background:#222;
+    border-color:#222
+  }
+
+  .check:checked:after{
+    content:"✓";
+    color:#fff;
+    font-size:11px;
+    position:absolute;
+    left:3px;
+    top:-1px
+  }
+
+  .task.done .task-label{
+    text-decoration:line-through;
+    color:#aaa
+  }
+
+  .task-label{
+    font-size:12px;
+    line-height:1.3;
+    flex:1
+  }
+
+  .content-btn{
+    border:1px solid #e3dfd6;
+    background:#faf9f6;
+    color:#8b6424;
+    border-radius:7px;
+    padding:4px 7px;
+    font-size:9px;
+    white-space:nowrap
+  }
+
+  .content-btn:hover{
+    background:var(--gold-soft);
+    border-color:#e1c995
+  }
+
+  .content-btn.has-content{
+    background:#f5ead4;
+    border-color:#e1c995;
+    font-weight:700
+  }
+
+  .weekend{
+    grid-column:1/-1
+  }
+
+  .weekend .section-icon{
+    background:var(--gold-soft);
+    color:#9a6d20
+  }
+
+  .weekend-card{padding-bottom:20px}
+
+  .weekend-note{
+    font-size:11px;
+    color:#77736b;
+    margin-top:-5px;
+    margin-bottom:12px
+  }
+
+  .reset{
+    display:block;
+    margin:18px auto 0;
+    border:1px solid #dfd8c9;
+    background:#fff;
+    border-radius:20px;
+    padding:8px 15px;
+    font-size:10px;
+    color:#625d54
+  }
+
+  .reset:hover{background:#faf7ef}
+
+  .empty{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:55px;
+    text-align:center;
+    color:#8d8981;
+    box-shadow:var(--shadow)
+  }
+
+  .modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(20,18,14,.38);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:50
+  }
+
+  .modal-backdrop.open{display:flex}
+
+  .modal{
+    width:min(680px,100%);
+    background:#fff;
+    border-radius:20px;
+    box-shadow:0 25px 70px rgba(0,0,0,.2);
+    overflow:hidden
+  }
+
+  .modal-head{
+    padding:18px 21px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center
+  }
+
+  .modal-title{
+    font-weight:800;
+    font-size:15px
+  }
+
+  .modal-sub{
+    font-size:10px;
+    color:#8a857c;
+    margin-top:3px
+  }
+
+  .close{
+    border:0;
+    background:#f5f3ee;
+    border-radius:50%;
+    width:30px;
+    height:30px;
+    font-size:17px;
+    color:#666
+  }
+
+  .modal-body{padding:18px 21px}
+
+  .modal textarea{
+    width:100%;
+    min-height:330px;
+    border:1px solid #ddd9d0;
+    border-radius:12px;
+    padding:14px;
+    resize:vertical;
+    outline:none;
+    font-size:13px;
+    line-height:1.55;
+    color:#222
+  }
+
+  .modal textarea:focus{
+    border-color:#caa45e;
+    box-shadow:0 0 0 3px rgba(201,153,63,.1)
+  }
+
+  .modal-foot{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:12px
+  }
+
+  .modal-foot button{
+    border-radius:9px;
+    padding:9px 14px;
+    border:1px solid #ddd8cf;
+    background:#fff;
+    font-size:11px
+  }
+
+  .save{
+    background:#b98935!important;
+    border-color:#b98935!important;
+    color:#fff
+  }
+
+  .delete-content{
+    margin-right:auto;
+    color:#a94b3e!important
+  }
+
+  .toast{
+    position:fixed;
+    bottom:24px;
+    left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:#222;
+    color:#fff;
+    border-radius:10px;
+    padding:9px 13px;
+    font-size:11px;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+    z-index:100
+  }
+
+  .toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0)
+  }
+
+  @media(max-width:900px){
+    .sidebar{display:none}
+    .main{
+      margin-left:0;
+      padding:22px 16px 50px
+    }
+    .cards{grid-template-columns:1fr}
+    h1{font-size:30px}
+    .month-label{display:none}
+  }
+
+  @media(max-width:560px){
+    .progress-card{align-items:flex-start}
+    .motivation{display:none}
+    .date-nav{margin-right:-16px}
+    .card{padding:16px}
+    .task-label{font-size:11px}
+    .content-btn{
+      font-size:8px;
+      padding:4px 6px
+    }
+  }
 </style>
 </head>
+
 <body>
 
 <div class="app">
+
   <aside class="sidebar">
+
     <div class="brand">
       <div class="brand-mark">▦</div>
+
       <div>
-        <div class="brand-name">Peer<span>Metals</span></div>
-        <div class="brand-sub">TASK TRACKER</div>
+        <div class="brand-name">
+          Peer<span>Metals</span>
+        </div>
+
+        <div class="brand-sub">
+          TASK TRACKER
+        </div>
       </div>
     </div>
 
     <div class="calendar-box">
+
       <div class="cal-head">
-        <button id="prevMonth">‹</button>
-        <span>OCTOBER 2026</span>
-        <button id="nextMonth">›</button>
+
+        <button id="prevMonth">
+          ‹
+        </button>
+
+        <span>
+          OCTOBER 2026
+        </span>
+
+        <button id="nextMonth">
+          ›
+        </button>
+
       </div>
-      <div class="cal-grid" id="miniCalendar"></div>
+
+      <div
+        class="cal-grid"
+        id="miniCalendar"
+      ></div>
+
     </div>
 
     <nav class="nav">
-      <button class="active" id="todayNav">☼ &nbsp; Today</button>
-      <button id="monthNav">▦ &nbsp; This Month</button>
-      <button id="progressNav">▥ &nbsp; Progress</button>
-      <button id="settingsNav">⚙ &nbsp; Settings</button>
+
+      <button
+        class="active"
+        id="todayNav"
+      >
+        ☼ &nbsp; Today
+      </button>
+
+      <button id="monthNav">
+        ▦ &nbsp; This Month
+      </button>
+
+      <button id="progressNav">
+        ▥ &nbsp; Progress
+      </button>
+
+      <button id="settingsNav">
+        ⚙ &nbsp; Settings
+      </button>
+
     </nav>
 
     <div class="quote">
@@ -85,172 +718,376 @@
       BUILDS<br>
       WEALTH
     </div>
+
   </aside>
 
+
   <main class="main">
+
     <div class="wrap">
 
       <div class="topline">
+
         <div>
-          <div class="eyebrow" id="eyebrow">OCTOBER 5, 2026</div>
-          <h1 id="pageTitle">Monday, October 5, 2026</h1>
+
+          <div
+            class="eyebrow"
+            id="eyebrow"
+          >
+            OCTOBER 5, 2026
+          </div>
+
+          <h1 id="pageTitle">
+            Monday, October 5, 2026
+          </h1>
+
         </div>
-        <div class="month-label">— &nbsp; OCTOBER 2026</div>
+
+        <div class="month-label">
+          — &nbsp; OCTOBER 2026
+        </div>
+
       </div>
 
-      <div class="date-nav" id="dateNav"></div>
+
+      <div
+        class="date-nav"
+        id="dateNav"
+      ></div>
+
 
       <section class="progress-card">
-        <div class="progress-ring" id="progressRing">
-          <span id="progressPercent">0%</span>
+
+        <div
+          class="progress-ring"
+          id="progressRing"
+        >
+
+          <span id="progressPercent">
+            0%
+          </span>
+
         </div>
+
 
         <div class="progress-info">
-          <div class="progress-title" id="progressTitle">0 of 17 tasks completed</div>
-          <div class="bar">
-            <div class="bar-fill" id="barFill"></div>
+
+          <div
+            class="progress-title"
+            id="progressTitle"
+          >
+            0 of 17 tasks completed
           </div>
+
+          <div class="bar">
+
+            <div
+              class="bar-fill"
+              id="barFill"
+            ></div>
+
+          </div>
+
         </div>
 
-        <div class="motivation">✦ &nbsp; Keep going!</div>
+
+        <div class="motivation">
+          ✦ &nbsp; Keep going!
+        </div>
+
       </section>
+
 
       <div id="taskArea"></div>
 
     </div>
+
   </main>
+
 </div>
 
-<div class="modal-backdrop" id="modalBackdrop">
+
+<div
+  class="modal-backdrop"
+  id="modalBackdrop"
+>
+
   <div class="modal">
 
     <div class="modal-head">
+
       <div>
-        <div class="modal-title" id="modalTitle">Add Content</div>
-        <div class="modal-sub" id="modalSub">
+
+        <div
+          class="modal-title"
+          id="modalTitle"
+        >
+          Add Content
+        </div>
+
+        <div
+          class="modal-sub"
+          id="modalSub"
+        >
           Monday, October 5 · YouTube · Beginner Video
         </div>
+
       </div>
 
-      <button class="close" id="closeModal">×</button>
+      <button
+        class="close"
+        id="closeModal"
+      >
+        ×
+      </button>
+
     </div>
 
+
     <div class="modal-body">
+
       <textarea
         id="contentInput"
         placeholder="Paste or write your script, caption, post copy, notes, links, or any content here..."
       ></textarea>
 
+
       <div class="modal-foot">
-        <button class="delete-content" id="deleteContent">Delete Content</button>
-        <button id="cancelModal">Cancel</button>
-        <button class="save" id="saveContent">Save Content</button>
+
+        <button
+          class="delete-content"
+          id="deleteContent"
+        >
+          Delete Content
+        </button>
+
+        <button id="cancelModal">
+          Cancel
+        </button>
+
+        <button
+          class="save"
+          id="saveContent"
+        >
+          Save Content
+        </button>
+
       </div>
+
     </div>
 
   </div>
+
 </div>
 
-<div class="toast" id="toast"></div>
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
 
 <script>
+
 const weekdays = {
+
   twitter: {
+
     title:'Twitter / X',
+
     icon:'X',
+
     cls:'twitter',
+
     tasks:[
+
       'Repost Beginner Video',
+
       'Repost Experienced Stacker Video',
+
       '1 Educational Post',
+
       '1 Educational Thread',
+
       'Reply to Comments',
+
       '10 Tweets Comments'
+
     ]
+
   },
+
 
   youtube: {
+
     title:'YouTube',
+
     icon:'▶',
+
     cls:'youtube',
+
     tasks:[
+
       'Beginner Video',
+
       'Experienced Stacker Video',
+
       '1 Poll',
+
       '1 Product/Sales Post',
+
       'Reply to All Comments'
+
     ]
+
   },
+
 
   feed: {
+
     title:'Feed',
+
     icon:'••',
+
     cls:'feed',
+
     tasks:[
+
       '1 Feed Post',
+
       '2 Feed Post',
+
       '3 Feed Post',
+
       'Reply To Previous Day Comment',
+
       'Send DM If Necessary'
+
     ]
+
   },
 
+
   emails: {
+
     title:'Emails',
+
     icon:'✉',
+
     cls:'emails',
+
     tasks:[
+
       '1 Regular Email'
+
     ]
+
   }
+
 };
+
 
 const weekend = {
+
   title:'Weekend Email',
+
   icon:'✉',
+
   cls:'weekend',
+
   tasks:[
+
     'Weekend Email'
+
   ]
+
 };
 
-const startDate = new Date(2026,9,5);
-const endDate = new Date(2026,9,31);
+
+const startDate =
+  new Date(2026,9,5);
+
+const endDate =
+  new Date(2026,9,31);
+
 
 const dates=[];
+
 
 for(
   let d=new Date(startDate);
   d<=endDate;
   d.setDate(d.getDate()+1)
 ){
-  dates.push(new Date(d));
+
+  dates.push(
+    new Date(d)
+  );
+
 }
 
-let selectedKey='2026-10-05';
-let currentContentKey=null;
 
-const STORAGE_TASKS='peermetals_task_tracker_v1';
-const STORAGE_CONTENT='peermetals_content_v1';
+let selectedKey =
+  '2026-10-05';
 
-let taskState=JSON.parse(
-  localStorage.getItem(STORAGE_TASKS)||'{}'
-);
+let currentContentKey =
+  null;
 
-let contentState=JSON.parse(
-  localStorage.getItem(STORAGE_CONTENT)||'{}'
-);
+
+const STORAGE_TASKS =
+  'peermetals_task_tracker_v1';
+
+const STORAGE_CONTENT =
+  'peermetals_content_v1';
+
+
+let taskState =
+  JSON.parse(
+    localStorage.getItem(
+      STORAGE_TASKS
+    ) || '{}'
+  );
+
+
+let contentState =
+  JSON.parse(
+    localStorage.getItem(
+      STORAGE_CONTENT
+    ) || '{}'
+  );
+
 
 function keyForDate(date){
-  return date.toISOString().slice(0,10);
+
+  return date
+    .toISOString()
+    .slice(0,10);
+
 }
+
 
 function dateFromKey(key){
-  const [y,m,d]=key.split('-').map(Number);
-  return new Date(y,m-1,d);
+
+  const [
+    y,
+    m,
+    d
+  ] =
+    key
+      .split('-')
+      .map(Number);
+
+  return new Date(
+    y,
+    m-1,
+    d
+  );
+
 }
 
+
 function fmtLong(date){
+
   return date.toLocaleDateString(
     'en-US',
     {
@@ -260,91 +1097,194 @@ function fmtLong(date){
       year:'numeric'
     }
   );
+
 }
+
 
 function isWeekendEmailDay(date){
+
   return date.getDay()===6;
+
 }
+
 
 function isSunday(date){
+
   return date.getDay()===0;
+
 }
 
-function taskKey(dateKey,section,task){
+
+function taskKey(
+  dateKey,
+  section,
+  task
+){
+
   return `${dateKey}__${section}__${task}`;
+
 }
+
 
 function getSections(date){
 
-  if(isSunday(date)){
+  if(
+    isSunday(date)
+  ){
+
     return [];
+
   }
 
-  if(isWeekendEmailDay(date)){
+
+  if(
+    isWeekendEmailDay(date)
+  ){
+
     return [
+
       {
         ...weekend,
         id:'weekend'
       }
+
     ];
+
   }
 
-  return Object.entries(weekdays).map(
+
+  return Object.entries(
+    weekdays
+  ).map(
     ([id,s])=>({
+
       ...s,
+
       id
+
     })
   );
+
 }
 
+
 function getTasks(dateKey){
+
   return getSections(
     dateFromKey(dateKey)
   ).flatMap(
-    s=>s.tasks.map(
-      t=>taskKey(dateKey,s.id,t)
-    )
+    s=>
+      s.tasks.map(
+        t=>
+          taskKey(
+            dateKey,
+            s.id,
+            t
+          )
+      )
   );
+
 }
+
+
+/*
+  SAVE
+
+  This now saves locally first.
+
+  If Firebase is connected,
+  firebaseSyncSave() will also
+  save everything to Firebase.
+*/
 
 function save(){
 
   localStorage.setItem(
     STORAGE_TASKS,
-    JSON.stringify(taskState)
+    JSON.stringify(
+      taskState
+    )
   );
+
 
   localStorage.setItem(
     STORAGE_CONTENT,
-    JSON.stringify(contentState)
+    JSON.stringify(
+      contentState
+    )
   );
+
+
+  if(
+    typeof window.firebaseSyncSave ===
+    'function'
+  ){
+
+    window.firebaseSyncSave(
+      taskState,
+      contentState
+    );
+
+  }
+
 }
+
 
 function renderMiniCalendar(){
 
-  const el=document.getElementById('miniCalendar');
+  const el =
+    document.getElementById(
+      'miniCalendar'
+    );
 
-  const heads=[
-    'Mon','Tue','Wed','Thu',
-    'Fri','Sat','Sun'
+
+  const heads = [
+
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat',
+    'Sun'
+
   ];
 
-  el.innerHTML=heads
-    .map(x=>`<div class="dow">${x[0]}</div>`)
-    .join('');
 
-  const first=new Date(2026,9,1);
+  el.innerHTML =
+    heads
+      .map(
+        x=>
+          `<div class="dow">
+            ${x[0]}
+          </div>`
+      )
+      .join('');
 
-  const mondayOffset=
+
+  const first =
+    new Date(
+      2026,
+      9,
+      1
+    );
+
+
+  const mondayOffset =
     (first.getDay()+6)%7;
+
 
   for(
     let i=0;
     i<mondayOffset;
     i++
   ){
-    el.innerHTML+=`<div></div>`;
+
+    el.innerHTML +=
+      `<div></div>`;
+
   }
+
 
   for(
     let d=1;
@@ -352,294 +1292,504 @@ function renderMiniCalendar(){
     d++
   ){
 
-    const date=new Date(2026,9,d);
+    const date =
+      new Date(
+        2026,
+        9,
+        d
+      );
 
-    const key=keyForDate(date);
 
-    el.innerHTML+=`
+    const key =
+      keyForDate(date);
+
+
+    el.innerHTML += `
+
       <button
-        class="cal-day ${key===selectedKey?'active':''}"
+        class="cal-day ${
+          key===selectedKey
+            ? 'active'
+            : ''
+        }"
         data-key="${key}"
       >
+
         ${d}
+
       </button>
+
     `;
+
   }
 
-  el.querySelectorAll('.cal-day')
+
+  el
+    .querySelectorAll('.cal-day')
     .forEach(
-      b=>b.onclick=()=>selectDate(b.dataset.key)
+      b=>
+        b.onclick =
+          ()=>
+            selectDate(
+              b.dataset.key
+            )
     );
+
 }
+
 
 function renderDateNav(){
 
-  const el=document.getElementById('dateNav');
-
-  el.innerHTML=dates.map(
-    date=>{
-
-      const key=keyForDate(date);
-
-      return `
-        <button
-          class="date-btn ${key===selectedKey?'active':''}"
-          data-key="${key}"
-        >
-          <strong>${date.getDate()}</strong>
-          <span>
-            ${date.toLocaleDateString(
-              'en-US',
-              {weekday:'short'}
-            )}
-          </span>
-        </button>
-      `;
-    }
-  ).join('');
-
-  el.querySelectorAll('.date-btn')
-    .forEach(
-      b=>b.onclick=()=>selectDate(b.dataset.key)
+  const el =
+    document.getElementById(
+      'dateNav'
     );
 
-  const active=el.querySelector('.active');
+
+  el.innerHTML =
+    dates
+      .map(
+        date=>{
+
+          const key =
+            keyForDate(date);
+
+
+          return `
+
+            <button
+              class="date-btn ${
+                key===selectedKey
+                  ? 'active'
+                  : ''
+              }"
+              data-key="${key}"
+            >
+
+              <strong>
+                ${date.getDate()}
+              </strong>
+
+              <span>
+
+                ${
+                  date.toLocaleDateString(
+                    'en-US',
+                    {
+                      weekday:'short'
+                    }
+                  )
+                }
+
+              </span>
+
+            </button>
+
+          `;
+
+        }
+      )
+      .join('');
+
+
+  el
+    .querySelectorAll('.date-btn')
+    .forEach(
+      b=>
+        b.onclick =
+          ()=>
+            selectDate(
+              b.dataset.key
+            )
+    );
+
+
+  const active =
+    el.querySelector(
+      '.active'
+    );
+
 
   if(active){
+
     active.scrollIntoView({
       inline:'center',
       behavior:'smooth',
       block:'nearest'
     });
+
   }
+
 }
+
 
 function render(){
 
-  const date=dateFromKey(selectedKey);
+  const date =
+    dateFromKey(
+      selectedKey
+    );
 
-  document.getElementById('eyebrow')
-    .textContent=
-      date.toLocaleDateString(
+
+  document.getElementById(
+    'eyebrow'
+  ).textContent =
+
+    date
+      .toLocaleDateString(
         'en-US',
         {
           month:'long',
           day:'numeric',
           year:'numeric'
         }
-      ).toUpperCase();
+      )
+      .toUpperCase();
 
-  document.getElementById('pageTitle')
-    .textContent=fmtLong(date);
+
+  document.getElementById(
+    'pageTitle'
+  ).textContent =
+    fmtLong(date);
+
 
   renderDateNav();
+
   renderMiniCalendar();
+
   renderTasks();
+
   updateProgress();
+
 }
+
 
 function renderTasks(){
 
-  const date=dateFromKey(selectedKey);
+  const date =
+    dateFromKey(
+      selectedKey
+    );
 
-  const area=document.getElementById('taskArea');
 
-  const sections=getSections(date);
+  const area =
+    document.getElementById(
+      'taskArea'
+    );
+
+
+  const sections =
+    getSections(date);
+
 
   if(!sections.length){
 
-    area.innerHTML=`
+    area.innerHTML = `
+
       <div class="empty">
-        <strong>No scheduled tasks.</strong>
+
+        <strong>
+          No scheduled tasks.
+        </strong>
+
         <br>
-        <span>Sunday is intentionally kept clear.</span>
+
+        <span>
+          Sunday is intentionally kept clear.
+        </span>
+
       </div>
+
     `;
 
     return;
+
   }
 
-  area.innerHTML=`
+
+  area.innerHTML = `
+
     <div class="cards">
 
-      ${sections.map(section=>{
+      ${
+        sections.map(
+          section=>{
 
-        const count=section.tasks.length;
+            const count =
+              section.tasks.length;
 
-        return `
-          <section
-            class="card ${section.cls}
-            ${section.id==='weekend'?'weekend-card':''}"
-          >
 
-            <div class="card-head">
+            return `
 
-              <div class="section-title">
-
-                <span class="section-icon">
-                  ${section.icon}
-                </span>
-
-                ${section.title}
-
-              </div>
-
-              <span
-                class="section-count"
-                id="count-${section.id}"
+              <section
+                class="card ${
+                  section.cls
+                } ${
+                  section.id==='weekend'
+                    ? 'weekend-card'
+                    : ''
+                }"
               >
-                0 / ${count}
-              </span>
 
-            </div>
+                <div class="card-head">
 
-            ${
-              section.id==='weekend'
-              ?
-              `
-                <div class="weekend-note">
-                  Saturday special task — nothing else is scheduled today.
-                </div>
-              `
-              :
-              ''
-            }
+                  <div class="section-title">
 
-            <div class="tasks">
+                    <span class="section-icon">
 
-              ${section.tasks.map(task=>{
+                      ${section.icon}
 
-                const tk=
-                  taskKey(
-                    selectedKey,
-                    section.id,
-                    task
-                  );
-
-                const checked=
-                  !!taskState[tk];
-
-                const has=
-                  !!contentState[tk];
-
-                return `
-                  <label
-                    class="task ${checked?'done':''}"
-                    data-task-key="${escapeAttr(tk)}"
-                  >
-
-                    <input
-                      class="check"
-                      type="checkbox"
-                      ${checked?'checked':''}
-                    >
-
-                    <span class="task-label">
-                      ${escapeHtml(task)}
                     </span>
 
-                    <button
-                      type="button"
-                      class="content-btn ${has?'has-content':''}"
-                      data-content-key="${escapeAttr(tk)}"
-                    >
-                      ${has?'View Content':'＋ Content'}
-                    </button>
+                    ${section.title}
 
-                  </label>
-                `;
+                  </div>
 
-              }).join('')}
 
-            </div>
+                  <span
+                    class="section-count"
+                    id="count-${section.id}"
+                  >
+                    0 / ${count}
+                  </span>
 
-          </section>
-        `;
+                </div>
 
-      }).join('')}
+
+                ${
+                  section.id==='weekend'
+                  ?
+                  `
+
+                    <div class="weekend-note">
+
+                      Saturday special task —
+                      nothing else is scheduled today.
+
+                    </div>
+
+                  `
+                  :
+                  ''
+                }
+
+
+                <div class="tasks">
+
+                  ${
+                    section.tasks.map(
+                      task=>{
+
+                        const tk =
+                          taskKey(
+                            selectedKey,
+                            section.id,
+                            task
+                          );
+
+
+                        const checked =
+                          !!taskState[tk];
+
+
+                        const has =
+                          !!contentState[tk];
+
+
+                        return `
+
+                          <label
+                            class="task ${
+                              checked
+                                ? 'done'
+                                : ''
+                            }"
+                            data-task-key="${
+                              escapeAttr(tk)
+                            }"
+                          >
+
+                            <input
+                              class="check"
+                              type="checkbox"
+                              ${
+                                checked
+                                  ? 'checked'
+                                  : ''
+                              }
+                            >
+
+
+                            <span class="task-label">
+
+                              ${
+                                escapeHtml(
+                                  task
+                                )
+                              }
+
+                            </span>
+
+
+                            <button
+                              type="button"
+                              class="content-btn ${
+                                has
+                                  ? 'has-content'
+                                  : ''
+                              }"
+                              data-content-key="${
+                                escapeAttr(tk)
+                              }"
+                            >
+
+                              ${
+                                has
+                                  ? 'View Content'
+                                  : '＋ Content'
+                              }
+
+                            </button>
+
+                          </label>
+
+                        `;
+
+                      }
+                    ).join('')
+                  }
+
+                </div>
+
+              </section>
+
+            `;
+
+          }
+        ).join('')
+      }
 
     </div>
+
 
     <button
       class="reset"
       id="resetDay"
     >
+
       ↻ &nbsp; Reset This Day
+
     </button>
+
   `;
 
-  area.querySelectorAll('.check')
+
+  area
+    .querySelectorAll('.check')
     .forEach(
-      cb=>cb.addEventListener(
-        'change',
-        e=>{
+      cb=>
+        cb.addEventListener(
+          'change',
+          e=>{
 
-          const tk=
-            e.target
-              .closest('.task')
-              .dataset.taskKey;
+            const tk =
+              e.target
+                .closest('.task')
+                .dataset.taskKey;
 
-          if(e.target.checked){
-            taskState[tk]=true;
-          }else{
-            delete taskState[tk];
+
+            if(
+              e.target.checked
+            ){
+
+              taskState[tk] =
+                true;
+
+            }else{
+
+              delete taskState[tk];
+
+            }
+
+
+            save();
+
+            renderTasks();
+
+            updateProgress();
+
           }
-
-          save();
-
-          renderTasks();
-
-          updateProgress();
-        }
-      )
-    );
-
-  area.querySelectorAll('.content-btn')
-    .forEach(
-      btn=>btn.addEventListener(
-        'click',
-        ()=>openContent(
-          btn.dataset.contentKey
         )
-      )
     );
 
-  document.getElementById('resetDay')
-    .onclick=()=>{
 
-      getTasks(selectedKey)
-        .forEach(
-          t=>{
-            delete taskState[t];
+  area
+    .querySelectorAll('.content-btn')
+    .forEach(
+      btn=>
+        btn.addEventListener(
+          'click',
+          ()=>{
+            openContent(
+              btn.dataset.contentKey
+            );
           }
-        );
+        )
+    );
 
-      save();
 
-      render();
+  document.getElementById(
+    'resetDay'
+  ).onclick = ()=>{
 
-      toast('Day reset');
-    };
+    getTasks(
+      selectedKey
+    )
+    .forEach(
+      t=>{
+        delete taskState[t];
+      }
+    );
+
+
+    save();
+
+    render();
+
+    toast(
+      'Day reset'
+    );
+
+  };
+
 
   updateSectionCounts();
+
 }
+
 
 function updateSectionCounts(){
 
-  const date=dateFromKey(selectedKey);
+  const date =
+    dateFromKey(
+      selectedKey
+    );
+
 
   getSections(date)
     .forEach(
       s=>{
 
-        const el=
+        const el =
           document.getElementById(
             'count-'+s.id
           );
 
+
         if(!el)return;
 
-        const done=
+
+        const done =
           s.tasks.filter(
             t=>
               taskState[
@@ -651,196 +1801,297 @@ function updateSectionCounts(){
               ]
           ).length;
 
-        el.textContent=
+
+        el.textContent =
           `${done} / ${s.tasks.length}`;
+
       }
     );
+
 }
+
 
 function updateProgress(){
 
-  const tasks=getTasks(selectedKey);
+  const tasks =
+    getTasks(
+      selectedKey
+    );
 
-  const total=tasks.length;
 
-  const done=
+  const total =
+    tasks.length;
+
+
+  const done =
     tasks.filter(
       t=>taskState[t]
     ).length;
 
-  const pct=
+
+  const pct =
     total
-      ? Math.round(done/total*100)
+      ? Math.round(
+          done/total*100
+        )
       : 0;
+
 
   document.getElementById(
     'progressPercent'
-  ).textContent=pct+'%';
+  ).textContent =
+    pct+'%';
+
 
   document.getElementById(
     'progressTitle'
-  ).textContent=
+  ).textContent =
     `${done} of ${total} tasks completed`;
+
 
   document.getElementById(
     'barFill'
-  ).style.width=pct+'%';
+  ).style.width =
+    pct+'%';
+
 
   document.getElementById(
     'progressRing'
-  ).style.background=
+  ).style.background =
+
     `conic-gradient(
       var(--gold)
       ${pct*3.6}deg,
       #e6e3dd 0deg
     )`;
+
 }
+
 
 function selectDate(key){
 
   if(
     !dates.some(
-      d=>keyForDate(d)===key
+      d=>
+        keyForDate(d)===key
     )
   ){
+
     return;
+
   }
 
-  selectedKey=key;
+
+  selectedKey =
+    key;
+
 
   render();
 
+
   window.scrollTo({
+
     top:0,
+
     behavior:'smooth'
+
   });
+
 }
+
 
 function escapeHtml(s){
 
   return s.replace(
     /[&<>'"]/g,
-    c=>({
-      '&':'&amp;',
-      '<':'&lt;',
-      '>':'&gt;',
-      "'":'&#39;',
-      '"':'&quot;'
-    }[c])
+    c=>
+      ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        "'":'&#39;',
+        '"':'&quot;'
+      }[c])
   );
+
 }
 
+
 function escapeAttr(s){
+
   return escapeHtml(s);
+
 }
+
 
 function openContent(tk){
 
-  currentContentKey=tk;
+  currentContentKey =
+    tk;
 
-  const parts=tk.split('__');
 
-  const dateKey=parts[0];
-  const section=parts[1];
-  const task=parts.slice(2).join('__');
+  const parts =
+    tk.split('__');
 
-  const date=dateFromKey(dateKey);
 
-  const sectionObj=
+  const dateKey =
+    parts[0];
+
+
+  const section =
+    parts[1];
+
+
+  const task =
+    parts
+      .slice(2)
+      .join('__');
+
+
+  const date =
+    dateFromKey(
+      dateKey
+    );
+
+
+  const sectionObj =
     getSections(date)
       .find(
-        s=>s.id===section
+        s=>
+          s.id===section
       );
+
 
   document.getElementById(
     'modalTitle'
-  ).textContent=
+  ).textContent =
+
     contentState[tk]
       ? 'Edit Content'
       : 'Add Content';
 
+
   document.getElementById(
     'modalSub'
-  ).textContent=
+  ).textContent =
+
     `${fmtLong(date)} · ${
       sectionObj
         ? sectionObj.title
         : section
     } · ${task}`;
 
+
   document.getElementById(
     'contentInput'
-  ).value=
-    contentState[tk]||'';
+  ).value =
+    contentState[tk] || '';
+
 
   document.getElementById(
     'deleteContent'
-  ).style.display=
+  ).style.display =
+
     contentState[tk]
       ? 'block'
       : 'none';
 
+
   document.getElementById(
     'modalBackdrop'
-  ).classList.add('open');
+  ).classList.add(
+    'open'
+  );
+
 
   setTimeout(
-    ()=>document
-      .getElementById('contentInput')
-      .focus(),
+    ()=>{
+      document
+        .getElementById(
+          'contentInput'
+        )
+        .focus();
+    },
     50
   );
+
 }
+
 
 function closeModal(){
 
   document.getElementById(
     'modalBackdrop'
-  ).classList.remove('open');
+  ).classList.remove(
+    'open'
+  );
 
-  currentContentKey=null;
+
+  currentContentKey =
+    null;
+
 }
+
 
 document.getElementById(
   'closeModal'
-).onclick=closeModal;
+).onclick =
+  closeModal;
+
 
 document.getElementById(
   'cancelModal'
-).onclick=closeModal;
+).onclick =
+  closeModal;
+
 
 document.getElementById(
   'modalBackdrop'
 ).addEventListener(
   'click',
   e=>{
+
     if(
-      e.target.id==='modalBackdrop'
+      e.target.id===
+      'modalBackdrop'
     ){
+
       closeModal();
+
     }
+
   }
 );
 
+
 document.getElementById(
   'saveContent'
-).onclick=()=>{
+).onclick = ()=>{
 
-  const val=
+  const val =
     document
-      .getElementById('contentInput')
+      .getElementById(
+        'contentInput'
+      )
       .value
       .trim();
 
+
   if(val){
+
     contentState[
       currentContentKey
-    ]=val;
+    ] =
+      val;
+
   }else{
+
     delete contentState[
       currentContentKey
     ];
+
   }
+
 
   save();
 
@@ -853,15 +2104,18 @@ document.getElementById(
       ? 'Content saved'
       : 'Content cleared'
   );
+
 };
+
 
 document.getElementById(
   'deleteContent'
-).onclick=()=>{
+).onclick = ()=>{
 
   delete contentState[
     currentContentKey
   ];
+
 
   save();
 
@@ -869,72 +2123,127 @@ document.getElementById(
 
   renderTasks();
 
-  toast('Content deleted');
+  toast(
+    'Content deleted'
+  );
+
 };
+
 
 function toast(msg){
 
-  const el=
-    document.getElementById('toast');
+  const el =
+    document.getElementById(
+      'toast'
+    );
 
-  el.textContent=msg;
 
-  el.classList.add('show');
+  el.textContent =
+    msg;
+
+
+  el.classList.add(
+    'show'
+  );
+
 
   setTimeout(
-    ()=>el.classList.remove('show'),
+    ()=>{
+      el.classList.remove(
+        'show'
+      );
+    },
     1700
   );
+
 }
+
 
 document.getElementById(
   'todayNav'
-).onclick=()=>selectDate(
-  '2026-10-05'
-);
+).onclick =
+  ()=>selectDate(
+    '2026-10-05'
+  );
+
 
 document.getElementById(
   'monthNav'
-).onclick=()=>selectDate(
-  '2026-10-05'
-);
+).onclick =
+  ()=>selectDate(
+    '2026-10-05'
+  );
+
 
 document.getElementById(
   'progressNav'
-).onclick=()=>toast(
-  'Progress is shown for the selected day'
-);
+).onclick =
+  ()=>toast(
+    'Progress is shown for the selected day'
+  );
+
 
 document.getElementById(
   'settingsNav'
-).onclick=()=>toast(
-  'Settings are not needed for the current tracker'
-);
+).onclick =
+  ()=>toast(
+    'Settings are not needed for the current tracker'
+  );
+
 
 document.getElementById(
   'prevMonth'
-).onclick=()=>toast(
-  'This tracker is set for October 2026'
-);
+).onclick =
+  ()=>toast(
+    'This tracker is set for October 2026'
+  );
+
 
 document.getElementById(
   'nextMonth'
-).onclick=()=>toast(
-  'This tracker is set for October 2026'
-);
+).onclick =
+  ()=>toast(
+    'This tracker is set for October 2026'
+  );
+
 
 render();
+
 </script>
+
+
+<!-- ========================================================= -->
+<!-- FIREBASE -->
+<!-- ========================================================= -->
 
 <script type="module">
 
 import {
   initializeApp
-} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+} from
+"https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+
 
 import {
-  getDatabase
-} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+  getDatabase,
+  ref,
+  onValue,
+  set
+} from
+"https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+
+import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+
+/* =========================================================
+   FIREBASE CONFIG
+   ========================================================= */
 
 const firebaseConfig = {
 
@@ -961,13 +2270,349 @@ const firebaseConfig = {
 
   measurementId:
     "G-YEFX1P0M60"
+
 };
 
+
+/* =========================================================
+   INITIALIZE FIREBASE
+   ========================================================= */
+
 const app =
-  initializeApp(firebaseConfig);
+  initializeApp(
+    firebaseConfig
+  );
+
 
 const db =
   getDatabase(app);
+
+
+const auth =
+  getAuth(app);
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+let currentUser =
+  null;
+
+let firebaseReady =
+  false;
+
+let loadingFirebase =
+  false;
+
+
+/* =========================================================
+   SHOW FIREBASE STATUS
+   ========================================================= */
+
+function firebaseToast(message){
+
+  if(
+    typeof toast ===
+    'function'
+  ){
+
+    toast(message);
+
+  }
+
+}
+
+
+/* =========================================================
+   SIGN IN ANONYMOUSLY
+   ========================================================= */
+
+signInAnonymously(auth)
+  .catch(
+    error=>{
+
+      console.error(
+        'Firebase Anonymous Login Error:',
+        error
+      );
+
+
+      firebaseToast(
+        'Firebase login failed'
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   AUTH STATE
+   ========================================================= */
+
+onAuthStateChanged(
+  auth,
+  user=>{
+
+    if(!user){
+
+      console.log(
+        'No Firebase user'
+      );
+
+      return;
+
+    }
+
+
+    currentUser =
+      user;
+
+
+    console.log(
+      'Firebase user connected:',
+      user.uid
+    );
+
+
+    firebaseReady =
+      true;
+
+
+    startFirebaseSync();
+
+  }
+);
+
+
+/* =========================================================
+   FIREBASE DATABASE REFERENCE
+   ========================================================= */
+
+function getUserRef(){
+
+  if(!currentUser){
+
+    return null;
+
+  }
+
+
+  return ref(
+    db,
+    `users/${currentUser.uid}`
+  );
+
+}
+
+
+/* =========================================================
+   LOAD FIREBASE DATA
+   ========================================================= */
+
+function startFirebaseSync(){
+
+  if(
+    loadingFirebase
+  ){
+
+    return;
+
+  }
+
+
+  loadingFirebase =
+    true;
+
+
+  const userRef =
+    getUserRef();
+
+
+  if(!userRef){
+
+    return;
+
+  }
+
+
+  onValue(
+    userRef,
+    snapshot=>{
+
+      const data =
+        snapshot.val();
+
+
+      /*
+        If Firebase already has data,
+        use Firebase as the main source.
+      */
+
+      if(data){
+
+        taskState =
+          data.tasks || {};
+
+        contentState =
+          data.content || {};
+
+
+        localStorage.setItem(
+          STORAGE_TASKS,
+          JSON.stringify(
+            taskState
+          )
+        );
+
+
+        localStorage.setItem(
+          STORAGE_CONTENT,
+          JSON.stringify(
+            contentState
+          )
+        );
+
+
+        render();
+
+
+        console.log(
+          'Firebase data loaded'
+        );
+
+
+        return;
+
+      }
+
+
+      /*
+        If Firebase is empty,
+        upload the current localStorage
+        data to Firebase.
+      */
+
+      firebaseSyncSave(
+        taskState,
+        contentState
+      );
+
+    },
+    error=>{
+
+      console.error(
+        'Firebase read error:',
+        error
+      );
+
+
+      firebaseToast(
+        'Firebase connection error'
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SAVE TO FIREBASE
+   ========================================================= */
+
+window.firebaseSyncSave =
+  async function(
+    tasks,
+    content
+  ){
+
+    if(
+      !firebaseReady ||
+      !currentUser
+    ){
+
+      console.log(
+        'Firebase not ready. Saved locally.'
+      );
+
+      return;
+
+    }
+
+
+    const userRef =
+      getUserRef();
+
+
+    if(!userRef){
+
+      return;
+
+    }
+
+
+    try{
+
+      await set(
+        userRef,
+        {
+
+          tasks:
+            tasks || {},
+
+          content:
+            content || {},
+
+          updatedAt:
+            Date.now()
+
+        }
+      );
+
+
+      console.log(
+        'Saved to Firebase'
+      );
+
+    }
+    catch(error){
+
+      console.error(
+        'Firebase save error:',
+        error
+      );
+
+
+      firebaseToast(
+        'Could not save to Firebase'
+      );
+
+    }
+
+  };
+
+
+/* =========================================================
+   DEBUG INFO
+   ========================================================= */
+
+window.peerMetalsFirebase = {
+
+  getUser:()=>{
+    return currentUser;
+  },
+
+  getDatabase:()=>{
+    return db;
+  }
+
+};
+
+
+console.log(
+  'PeerMetals Firebase initialized'
+);
 
 </script>
 
