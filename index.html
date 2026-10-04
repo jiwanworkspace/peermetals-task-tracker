@@ -6,23 +6,20 @@
 <title>PeerMetals Task Tracker</title>
 
 <style>
-
 :root{
   --bg:#f6f5f1;
-  --panel:#ffffff;
+  --card:#fff;
   --sidebar:#fbfaf7;
   --text:#171717;
   --muted:#77736b;
-  --line:#e8e5de;
+  --line:#e7e3da;
   --gold:#c9993f;
-  --gold-dark:#a97825;
+  --gold-dark:#9b6d20;
   --gold-soft:#f5ead4;
-  --shadow:0 12px 30px rgba(32,29,22,.07);
+  --shadow:0 10px 28px rgba(30,25,15,.06);
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -31,15 +28,8 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
 
-button,
-input,
-textarea{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
 
 .app{
   min-height:100vh;
@@ -48,20 +38,18 @@ button{
 
 .sidebar{
   width:235px;
+  position:fixed;
+  inset:0 auto 0 0;
   background:var(--sidebar);
   border-right:1px solid var(--line);
   padding:28px 22px;
-  position:fixed;
-  left:0;
-  top:0;
-  bottom:0;
 }
 
 .brand{
   display:flex;
   align-items:center;
   gap:10px;
-  margin:4px 6px 34px;
+  margin:4px 6px 30px;
 }
 
 .brand-mark{
@@ -69,32 +57,28 @@ button{
   height:34px;
   border-radius:10px;
   background:linear-gradient(145deg,#d9ae5b,#b98228);
+  color:white;
   display:grid;
   place-items:center;
-  color:#fff;
-  font-size:14px;
-  box-shadow:0 5px 12px rgba(180,130,45,.2);
+  font-weight:800;
 }
 
 .brand-name{
   font-weight:800;
   font-size:16px;
-  letter-spacing:-.4px;
 }
 
-.brand-name span{
-  color:var(--gold-dark);
-}
+.brand-name span{color:var(--gold-dark)}
 
 .brand-sub{
   font-size:8px;
   letter-spacing:3px;
-  color:#77736b;
+  color:#777;
   margin-top:3px;
 }
 
 .calendar-box{
-  background:#fff;
+  background:white;
   border:1px solid var(--line);
   border-radius:16px;
   padding:14px;
@@ -105,7 +89,7 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  font-size:12px;
+  font-size:11px;
   font-weight:800;
   margin-bottom:12px;
 }
@@ -113,38 +97,34 @@ button{
 .cal-head button{
   border:0;
   background:transparent;
-  color:#777;
-  width:24px;
-  height:24px;
+  width:25px;
+  height:25px;
   border-radius:50%;
 }
 
-.cal-head button:hover{
-  background:#f1eee7;
-}
+.cal-head button:hover{background:#f1eee7}
 
 .cal-grid{
   display:grid;
   grid-template-columns:repeat(7,1fr);
-  gap:6px;
+  gap:5px;
   text-align:center;
   font-size:9px;
-  color:#777;
 }
 
-.cal-grid .dow{
+.dow{
+  color:#888;
   font-weight:700;
-  color:#8b877f;
 }
 
 .cal-day{
-  height:22px;
-  display:grid;
-  place-items:center;
-  border-radius:7px;
+  height:23px;
   border:0;
+  border-radius:7px;
   background:transparent;
 }
+
+.cal-day:hover{background:#f5f1e8}
 
 .cal-day.active{
   background:var(--gold);
@@ -155,7 +135,7 @@ button{
 .nav{
   display:flex;
   flex-direction:column;
-  gap:6px;
+  gap:5px;
 }
 
 .nav button{
@@ -168,8 +148,8 @@ button{
   font-size:13px;
 }
 
-.nav button.active,
-.nav button:hover{
+.nav button:hover,
+.nav button.active{
   background:var(--gold-soft);
   color:#8b6424;
 }
@@ -177,7 +157,7 @@ button{
 .quote{
   position:absolute;
   left:32px;
-  bottom:90px;
+  bottom:85px;
   border-left:2px solid #d4a955;
   padding-left:14px;
   color:#99938a;
@@ -194,7 +174,7 @@ button{
 
 .wrap{
   max-width:1090px;
-  margin:0 auto;
+  margin:auto;
 }
 
 .topline{
@@ -212,51 +192,44 @@ button{
   margin-bottom:12px;
 }
 
+h1{
+  margin:0;
+  font-size:36px;
+  letter-spacing:-1.8px;
+}
+
 .month-label{
   font-size:9px;
   letter-spacing:4px;
-  color:#9b968e;
-  margin-top:7px;
-}
-
-h1{
-  font-size:36px;
-  letter-spacing:-1.8px;
-  margin:0;
-  font-weight:800;
+  color:#99938a;
 }
 
 .date-nav{
   display:flex;
   gap:7px;
   overflow-x:auto;
-  padding-bottom:6px;
+  padding-bottom:7px;
   margin-bottom:18px;
   scrollbar-width:none;
 }
 
-.date-nav::-webkit-scrollbar{
-  display:none;
-}
+.date-nav::-webkit-scrollbar{display:none}
 
 .date-btn{
   min-width:56px;
   height:44px;
   border-radius:12px;
   border:1px solid var(--line);
-  background:#fff;
+  background:white;
   color:#444;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  line-height:1.1;
   flex:0 0 auto;
 }
 
-.date-btn strong{
-  font-size:12px;
-}
+.date-btn strong{font-size:12px}
 
 .date-btn span{
   font-size:9px;
@@ -267,16 +240,13 @@ h1{
 .date-btn.active{
   background:var(--gold);
   border-color:var(--gold);
-  color:#fff;
-  box-shadow:0 5px 14px rgba(194,145,56,.22);
+  color:white;
 }
 
-.date-btn.active span{
-  color:#fff;
-}
+.date-btn.active span{color:white}
 
 .progress-card{
-  background:#fff;
+  background:white;
   border:1px solid var(--line);
   border-radius:18px;
   padding:19px 23px;
@@ -302,20 +272,18 @@ h1{
   content:"";
   position:absolute;
   inset:7px;
-  background:#fff;
+  background:white;
   border-radius:50%;
 }
 
 .progress-ring span{
   position:relative;
   z-index:1;
-  font-weight:800;
   font-size:13px;
+  font-weight:800;
 }
 
-.progress-info{
-  flex:1;
-}
+.progress-info{flex:1}
 
 .progress-title{
   font-size:14px;
@@ -334,7 +302,6 @@ h1{
   height:100%;
   width:0;
   background:var(--gold);
-  border-radius:99px;
   transition:.2s;
 }
 
@@ -345,7 +312,6 @@ h1{
   padding:9px 13px;
   font-size:10px;
   font-weight:700;
-  white-space:nowrap;
 }
 
 .cards{
@@ -355,11 +321,15 @@ h1{
 }
 
 .card{
-  background:#fff;
+  background:white;
   border:1px solid var(--line);
   border-radius:17px;
   padding:19px 22px;
   box-shadow:var(--shadow);
+}
+
+.weekend{
+  grid-column:1/-1;
 }
 
 .card-head{
@@ -407,32 +377,38 @@ h1{
   color:#665ce8;
 }
 
+.weekend .section-icon{
+  background:var(--gold-soft);
+  color:#9a6d20;
+}
+
 .section-count{
   font-size:10px;
   color:#888;
 }
 
-.tasks{
-  display:flex;
-  flex-direction:column;
-  gap:0;
+.weekend-note{
+  font-size:11px;
+  color:#777;
+  margin-top:-5px;
+  margin-bottom:12px;
 }
 
 .task{
   display:flex;
   align-items:center;
   gap:10px;
-  min-height:30px;
+  min-height:32px;
   padding:3px 0;
 }
 
 .check{
   width:17px;
   height:17px;
+  appearance:none;
   border:1.5px solid #bbb8b0;
   border-radius:3px;
-  appearance:none;
-  background:#fff;
+  background:white;
   flex:0 0 auto;
   position:relative;
 }
@@ -444,11 +420,11 @@ h1{
 
 .check:checked:after{
   content:"✓";
-  color:#fff;
-  font-size:11px;
   position:absolute;
   left:3px;
   top:-1px;
+  color:white;
+  font-size:11px;
 }
 
 .task.done .task-label{
@@ -457,9 +433,9 @@ h1{
 }
 
 .task-label{
+  flex:1;
   font-size:12px;
   line-height:1.3;
-  flex:1;
 }
 
 .content-btn{
@@ -474,52 +450,27 @@ h1{
 
 .content-btn:hover{
   background:var(--gold-soft);
-  border-color:#e1c995;
 }
 
 .content-btn.has-content{
-  background:#f5ead4;
+  background:var(--gold-soft);
   border-color:#e1c995;
   font-weight:700;
-}
-
-.weekend{
-  grid-column:1/-1;
-}
-
-.weekend .section-icon{
-  background:var(--gold-soft);
-  color:#9a6d20;
-}
-
-.weekend-card{
-  padding-bottom:20px;
-}
-
-.weekend-note{
-  font-size:11px;
-  color:#77736b;
-  margin-top:-5px;
-  margin-bottom:12px;
 }
 
 .reset{
   display:block;
   margin:18px auto 0;
   border:1px solid #dfd8c9;
-  background:#fff;
+  background:white;
   border-radius:20px;
   padding:8px 15px;
   font-size:10px;
   color:#625d54;
 }
 
-.reset:hover{
-  background:#faf7ef;
-}
-
 .empty{
-  background:#fff;
+  background:white;
   border:1px solid var(--line);
   border-radius:18px;
   padding:55px;
@@ -540,16 +491,14 @@ h1{
   z-index:50;
 }
 
-.modal-backdrop.open{
-  display:flex;
-}
+.modal-backdrop.open{display:flex}
 
 .modal{
   width:min(680px,100%);
-  background:#fff;
+  background:white;
   border-radius:20px;
-  box-shadow:0 25px 70px rgba(0,0,0,.2);
   overflow:hidden;
+  box-shadow:0 25px 70px rgba(0,0,0,.2);
 }
 
 .modal-head{
@@ -561,13 +510,13 @@ h1{
 }
 
 .modal-title{
-  font-weight:800;
   font-size:15px;
+  font-weight:800;
 }
 
 .modal-sub{
   font-size:10px;
-  color:#8a857c;
+  color:#888;
   margin-top:3px;
 }
 
@@ -581,9 +530,7 @@ h1{
   color:#666;
 }
 
-.modal-body{
-  padding:18px 21px;
-}
+.modal-body{padding:18px 21px}
 
 .modal textarea{
   width:100%;
@@ -595,12 +542,10 @@ h1{
   outline:none;
   font-size:13px;
   line-height:1.55;
-  color:#222;
 }
 
 .modal textarea:focus{
   border-color:#caa45e;
-  box-shadow:0 0 0 3px rgba(201,153,63,.1);
 }
 
 .modal-foot{
@@ -614,14 +559,14 @@ h1{
   border-radius:9px;
   padding:9px 14px;
   border:1px solid #ddd8cf;
-  background:#fff;
+  background:white;
   font-size:11px;
 }
 
 .save{
   background:#b98935!important;
   border-color:#b98935!important;
-  color:#fff;
+  color:white;
 }
 
 .delete-content{
@@ -635,7 +580,7 @@ h1{
   left:50%;
   transform:translateX(-50%) translateY(20px);
   background:#222;
-  color:#fff;
+  color:white;
   border-radius:10px;
   padding:9px 13px;
   font-size:11px;
@@ -655,7 +600,7 @@ h1{
   right:18px;
   top:18px;
   z-index:200;
-  background:#fff;
+  background:white;
   border:1px solid var(--line);
   box-shadow:var(--shadow);
   border-radius:20px;
@@ -664,67 +609,29 @@ h1{
   color:#777;
 }
 
-.firebase-status.online{
-  color:#287a4b;
-}
-
-.firebase-status.error{
-  color:#a94b3e;
-}
+.firebase-status.online{color:#287a4b}
+.firebase-status.error{color:#a94b3e}
 
 @media(max-width:900px){
-
-  .sidebar{
-    display:none;
-  }
-
+  .sidebar{display:none}
   .main{
     margin-left:0;
     padding:22px 16px 50px;
   }
-
-  .cards{
-    grid-template-columns:1fr;
-  }
-
-  h1{
-    font-size:30px;
-  }
-
-  .month-label{
-    display:none;
-  }
+  .cards{grid-template-columns:1fr}
+  h1{font-size:30px}
+  .month-label{display:none}
 }
 
 @media(max-width:560px){
-
-  .progress-card{
-    align-items:flex-start;
-  }
-
-  .motivation{
-    display:none;
-  }
-
-  .date-nav{
-    margin-right:-16px;
-  }
-
-  .card{
-    padding:16px;
-  }
-
-  .task-label{
-    font-size:11px;
-  }
-
+  .motivation{display:none}
+  .progress-card{align-items:flex-start}
+  .task-label{font-size:11px}
   .content-btn{
     font-size:8px;
     padding:4px 6px;
   }
-
 }
-
 </style>
 </head>
 
@@ -736,196 +643,109 @@ h1{
 
 <div class="app">
 
-  <aside class="sidebar">
+<aside class="sidebar">
 
-    <div class="brand">
+  <div class="brand">
+    <div class="brand-mark">▦</div>
+    <div>
+      <div class="brand-name">Peer<span>Metals</span></div>
+      <div class="brand-sub">TASK TRACKER</div>
+    </div>
+  </div>
 
-      <div class="brand-mark">
-        ▦
+  <div class="calendar-box">
+    <div class="cal-head">
+      <button id="prevMonth">‹</button>
+      <span>OCTOBER 2026</span>
+      <button id="nextMonth">›</button>
+    </div>
+
+    <div class="cal-grid" id="miniCalendar"></div>
+  </div>
+
+  <nav class="nav">
+    <button class="active" id="todayNav">☼ &nbsp; Today</button>
+    <button id="monthNav">▦ &nbsp; This Month</button>
+    <button id="progressNav">▥ &nbsp; Progress</button>
+    <button id="settingsNav">⚙ &nbsp; Settings</button>
+  </nav>
+
+  <div class="quote">
+    DISCIPLINE<br>
+    BUILDS<br>
+    WEALTH
+  </div>
+
+</aside>
+
+<main class="main">
+
+<div class="wrap">
+
+  <div class="topline">
+
+    <div>
+      <div class="eyebrow" id="eyebrow"></div>
+      <h1 id="pageTitle"></h1>
+    </div>
+
+    <div class="month-label">
+      — &nbsp; OCTOBER 2026
+    </div>
+
+  </div>
+
+  <div class="date-nav" id="dateNav"></div>
+
+  <section class="progress-card">
+
+    <div class="progress-ring" id="progressRing">
+      <span id="progressPercent">0%</span>
+    </div>
+
+    <div class="progress-info">
+
+      <div class="progress-title" id="progressTitle">
+        0 of 0 tasks completed
       </div>
 
-      <div>
-
-        <div class="brand-name">
-          Peer<span>Metals</span>
-        </div>
-
-        <div class="brand-sub">
-          TASK TRACKER
-        </div>
-
+      <div class="bar">
+        <div class="bar-fill" id="barFill"></div>
       </div>
 
     </div>
 
-    <div class="calendar-box">
-
-      <div class="cal-head">
-
-        <button id="prevMonth">
-          ‹
-        </button>
-
-        <span>
-          OCTOBER 2026
-        </span>
-
-        <button id="nextMonth">
-          ›
-        </button>
-
-      </div>
-
-      <div
-        class="cal-grid"
-        id="miniCalendar"
-      ></div>
-
+    <div class="motivation">
+      ✦ &nbsp; Keep going!
     </div>
 
-    <nav class="nav">
+  </section>
 
-      <button
-        class="active"
-        id="todayNav"
-      >
-        ☼ &nbsp; Today
-      </button>
-
-      <button id="monthNav">
-        ▦ &nbsp; This Month
-      </button>
-
-      <button id="progressNav">
-        ▥ &nbsp; Progress
-      </button>
-
-      <button id="settingsNav">
-        ⚙ &nbsp; Settings
-      </button>
-
-    </nav>
-
-    <div class="quote">
-      DISCIPLINE<br>
-      BUILDS<br>
-      WEALTH
-    </div>
-
-  </aside>
-
-  <main class="main">
-
-    <div class="wrap">
-
-      <div class="topline">
-
-        <div>
-
-          <div
-            class="eyebrow"
-            id="eyebrow"
-          >
-            OCTOBER 5, 2026
-          </div>
-
-          <h1 id="pageTitle">
-            Monday, October 5, 2026
-          </h1>
-
-        </div>
-
-        <div class="month-label">
-          — &nbsp; OCTOBER 2026
-        </div>
-
-      </div>
-
-      <div
-        class="date-nav"
-        id="dateNav"
-      ></div>
-
-      <section class="progress-card">
-
-        <div
-          class="progress-ring"
-          id="progressRing"
-        >
-
-          <span id="progressPercent">
-            0%
-          </span>
-
-        </div>
-
-        <div class="progress-info">
-
-          <div
-            class="progress-title"
-            id="progressTitle"
-          >
-            0 of 17 tasks completed
-          </div>
-
-          <div class="bar">
-
-            <div
-              class="bar-fill"
-              id="barFill"
-            ></div>
-
-          </div>
-
-        </div>
-
-        <div class="motivation">
-          ✦ &nbsp; Keep going!
-        </div>
-
-      </section>
-
-      <div id="taskArea"></div>
-
-    </div>
-
-  </main>
+  <div id="taskArea"></div>
 
 </div>
 
-<div
-  class="modal-backdrop"
-  id="modalBackdrop"
->
+</main>
+
+</div>
+
+<!-- CONTENT MODAL -->
+
+<div class="modal-backdrop" id="modalBackdrop">
 
   <div class="modal">
 
     <div class="modal-head">
 
       <div>
-
-        <div
-          class="modal-title"
-          id="modalTitle"
-        >
+        <div class="modal-title" id="modalTitle">
           Add Content
         </div>
 
-        <div
-          class="modal-sub"
-          id="modalSub"
-        >
-          Monday, October 5 · YouTube · Beginner Video
-        </div>
-
+        <div class="modal-sub" id="modalSub"></div>
       </div>
 
-      <button
-        class="close"
-        id="closeModal"
-      >
-        ×
-      </button>
+      <button class="close" id="closeModal">×</button>
 
     </div>
 
@@ -949,10 +769,7 @@ h1{
           Cancel
         </button>
 
-        <button
-          class="save"
-          id="saveContent"
-        >
+        <button class="save" id="saveContent">
           Save Content
         </button>
 
@@ -964,10 +781,7 @@ h1{
 
 </div>
 
-<div
-  class="toast"
-  id="toast"
-></div>
+<div class="toast" id="toast"></div>
 
 
 <script type="module">
@@ -984,15 +798,15 @@ import {
 import {
   getDatabase,
   ref,
-  set,
-  onValue
+  onValue,
+  set
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
 
 const firebaseConfig = {
 
   apiKey:
-    "AIzaSyA4KdCgPeKwnNkwZXDcyqrzTozZo6WF6ueg",
+    "AIzaSyA4KdCgPeKwNkwZXDcyqrzTozZo6WF6ueg",
 
   authDomain:
     "peermetals-task-tracker.firebaseapp.com",
@@ -1018,107 +832,66 @@ const firebaseConfig = {
 };
 
 
-const app =
+const firebaseApp =
   initializeApp(firebaseConfig);
 
 const db =
-  getDatabase(app);
+  getDatabase(firebaseApp);
 
 
 /* =========================================================
-   APP DATA
+   TASK DATA
 ========================================================= */
 
 const weekdays = {
 
-  twitter: {
-
-    title:'Twitter / X',
-
-    icon:'X',
-
-    cls:'twitter',
-
+  twitter:{
+    title:"Twitter / X",
+    icon:"X",
+    cls:"twitter",
     tasks:[
-
-      'Repost Beginner Video',
-
-      'Repost Experienced Stacker Video',
-
-      '1 Educational Post',
-
-      '1 Educational Thread',
-
-      'Reply to Comments',
-
-      '10 Tweets Comments'
-
+      "Repost Beginner Video",
+      "Repost Experienced Stacker Video",
+      "1 Educational Post",
+      "1 Educational Thread",
+      "Reply to Comments",
+      "10 Tweets Comments"
     ]
-
   },
 
-  youtube: {
-
-    title:'YouTube',
-
-    icon:'▶',
-
-    cls:'youtube',
-
+  youtube:{
+    title:"YouTube",
+    icon:"▶",
+    cls:"youtube",
     tasks:[
-
-      'Beginner Video',
-
-      'Experienced Stacker Video',
-
-      '1 Poll',
-
-      '1 Product/Sales Post',
-
-      'Reply to All Comments'
-
+      "Beginner Video",
+      "Experienced Stacker Video",
+      "1 Poll",
+      "1 Product/Sales Post",
+      "Reply to All Comments"
     ]
-
   },
 
-  feed: {
-
-    title:'Feed',
-
-    icon:'••',
-
-    cls:'feed',
-
+  feed:{
+    title:"Feed",
+    icon:"••",
+    cls:"feed",
     tasks:[
-
-      '1 Feed Post',
-
-      '2 Feed Post',
-
-      '3 Feed Post',
-
-      'Reply To Previous Day Comment',
-
-      'Send DM If Necessary'
-
+      "1 Feed Post",
+      "2 Feed Post",
+      "3 Feed Post",
+      "Reply To Previous Day Comment",
+      "Send DM If Necessary"
     ]
-
   },
 
-  emails: {
-
-    title:'Emails',
-
-    icon:'✉',
-
-    cls:'emails',
-
+  emails:{
+    title:"Emails",
+    icon:"✉",
+    cls:"emails",
     tasks:[
-
-      '1 Regular Email'
-
+      "1 Regular Email"
     ]
-
   }
 
 };
@@ -1126,109 +899,93 @@ const weekdays = {
 
 const weekend = {
 
-  title:'Weekend Email',
-
-  icon:'✉',
-
-  cls:'weekend',
+  title:"Weekend Email",
+  icon:"✉",
+  cls:"weekend",
 
   tasks:[
-
-    'Weekend Email'
-
+    "Weekend Email"
   ]
 
 };
 
 
-const startDate =
-  new Date(2026,9,5);
+/* =========================================================
+   OCTOBER 2026
+========================================================= */
 
-const endDate =
-  new Date(2026,9,31);
-
-
-const dates=[];
-
+const dates = [];
 
 for(
-  let d=new Date(startDate);
-  d<=endDate;
-  d.setDate(d.getDate()+1)
+  let day=5;
+  day<=31;
+  day++
 ){
 
   dates.push(
-    new Date(d)
+    new Date(
+      2026,
+      9,
+      day
+    )
   );
 
 }
 
 
 let selectedKey =
-  '2026-10-05';
+  "2026-10-05";
 
-let currentContentKey =
-  null;
-
-
-/* =========================================================
-   FIREBASE STATE
-========================================================= */
 
 let taskState = {};
 
 let contentState = {};
 
-let firebaseReady = false;
+let currentContentKey = null;
 
 
 /* =========================================================
    FIREBASE STATUS
 ========================================================= */
 
-function setFirebaseStatus(
-  message,
-  type=''
+function firebaseStatus(
+  text,
+  type=""
 ){
 
   const el =
     document.getElementById(
-      'firebaseStatus'
+      "firebaseStatus"
     );
 
-  el.textContent =
-    message;
+  el.textContent = text;
 
   el.className =
-    'firebase-status '+type;
+    "firebase-status " + type;
 
 }
 
 
 /* =========================================================
-   DATE HELPERS
-
-   IMPORTANT:
-   Uses LOCAL date instead of toISOString()
-   to avoid timezone problems.
+   DATE FUNCTIONS
 ========================================================= */
 
-function keyForDate(date){
+function dateKey(date){
 
-  const year =
+  const y =
     date.getFullYear();
 
-  const month =
+  const m =
     String(
       date.getMonth()+1
-    ).padStart(2,'0');
+    ).padStart(2,"0");
 
-  const day =
+  const d =
     String(
       date.getDate()
-    ).padStart(2,'0');
+    ).padStart(2,"0");
 
-  return `${year}-${month}-${day}`;
+  return `${y}-${m}-${d}`;
 
 }
 
@@ -1240,9 +997,7 @@ function dateFromKey(key){
     m,
     d
   ] =
-    key
-      .split('-')
-      .map(Number);
+    key.split("-").map(Number);
 
   return new Date(
     y,
@@ -1253,104 +1008,91 @@ function dateFromKey(key){
 }
 
 
-function fmtLong(date){
+function longDate(date){
 
   return date.toLocaleDateString(
-    'en-US',
+    "en-US",
     {
-      weekday:'long',
-      month:'long',
-      day:'numeric',
-      year:'numeric'
+      weekday:"long",
+      month:"long",
+      day:"numeric",
+      year:"numeric"
     }
   );
 
 }
 
 
-function isWeekendEmailDay(date){
+function isSaturday(date){
 
-  return date.getDay()===6;
+  return date.getDay() === 6;
 
 }
 
 
 function isSunday(date){
 
-  return date.getDay()===0;
+  return date.getDay() === 0;
 
 }
 
 
 /* =========================================================
-   TASK HELPERS
+   SECTION FUNCTIONS
 ========================================================= */
 
-function taskKey(
-  dateKey,
-  section,
-  task
-){
+function sectionsForDate(date){
 
-  return `${dateKey}__${section}__${task}`;
-
-}
-
-
-function getSections(date){
-
-  if(
-    isSunday(date)
-  ){
-
+  if(isSunday(date)){
     return [];
-
   }
 
-
-  if(
-    isWeekendEmailDay(date)
-  ){
+  if(isSaturday(date)){
 
     return [
-
       {
         ...weekend,
-        id:'weekend'
+        id:"weekend"
       }
-
     ];
 
   }
 
-
   return Object.entries(
     weekdays
   ).map(
-    ([id,s])=>({
-
-      ...s,
-
+    ([id,section])=>({
+      ...section,
       id
-
     })
   );
 
 }
 
 
-function getTasks(dateKey){
+function makeTaskKey(
+  date,
+  section,
+  task
+){
 
-  return getSections(
-    dateFromKey(dateKey)
+  return `${date}__${section}__${task}`;
+
+}
+
+
+function tasksForDate(key){
+
+  return sectionsForDate(
+    dateFromKey(key)
   ).flatMap(
-    s=>
-      s.tasks.map(
-        t=>
-          taskKey(
-            dateKey,
-            s.id,
-            t
+    section =>
+      section.tasks.map(
+        task =>
+          makeTaskKey(
+            key,
+            section.id,
+            task
           )
       )
   );
@@ -1359,44 +1101,124 @@ function getTasks(dateKey){
 
 
 /* =========================================================
-   SAVE ONE TASK
-   Does NOT overwrite the whole database.
+   FIREBASE REFERENCES
 ========================================================= */
 
-async function saveTask(
-  tk,
-  value
-){
+const tasksRef =
+  ref(
+    db,
+    "tracker/tasks"
+  );
+
+const contentRef =
+  ref(
+    db,
+    "tracker/content"
+  );
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+onValue(
+  tasksRef,
+
+  snapshot => {
+
+    const data =
+      snapshot.val();
+
+    taskState =
+      data &&
+      typeof data === "object"
+        ? data
+        : {};
+
+    firebaseStatus(
+      "✓ Firebase connected",
+      "online"
+    );
+
+    render();
+
+  },
+
+  error => {
+
+    console.error(error);
+
+    firebaseStatus(
+      "Firebase read error",
+      "error"
+    );
+
+  }
+
+);
+
+
+onValue(
+  contentRef,
+
+  snapshot => {
+
+    const data =
+      snapshot.val();
+
+    contentState =
+      data &&
+      typeof data === "object"
+        ? data
+        : {};
+
+    render();
+
+  },
+
+  error => {
+
+    console.error(error);
+
+    firebaseStatus(
+      "Firebase read error",
+      "error"
+    );
+
+  }
+
+);
+
+
+/* =========================================================
+   SAVE TASKS
+========================================================= */
+
+async function saveTasks(){
 
   try{
 
     await set(
-      ref(
-        db,
-        `tracker/tasks/${encodeURIComponent(tk)}`
-      ),
-      value ? true : null
+      tasksRef,
+      taskState
     );
 
-    setFirebaseStatus(
-      '✓ Saved',
-      'online'
+    firebaseStatus(
+      "✓ Saved",
+      "online"
     );
 
   }catch(error){
 
-    console.error(
-      'Task save error:',
-      error
-    );
+    console.error(error);
 
-    setFirebaseStatus(
-      'Database error',
-      'error'
+    firebaseStatus(
+      "Firebase save error",
+      "error"
     );
 
     toast(
-      'Could not save task'
+      "Could not save task"
     );
 
   }
@@ -1405,43 +1227,34 @@ async function saveTask(
 
 
 /* =========================================================
-   SAVE ONE CONTENT ITEM
+   SAVE CONTENT
 ========================================================= */
 
-async function saveContentToFirebase(
-  tk,
-  value
-){
+async function saveContent(){
 
   try{
 
     await set(
-      ref(
-        db,
-        `tracker/content/${encodeURIComponent(tk)}`
-      ),
-      value || null
+      contentRef,
+      contentState
     );
 
-    setFirebaseStatus(
-      '✓ Saved',
-      'online'
+    firebaseStatus(
+      "✓ Saved",
+      "online"
     );
 
   }catch(error){
 
-    console.error(
-      'Content save error:',
-      error
-    );
+    console.error(error);
 
-    setFirebaseStatus(
-      'Database error',
-      'error'
+    firebaseStatus(
+      "Firebase save error",
+      "error"
     );
 
     toast(
-      'Could not save content'
+      "Could not save content"
     );
 
   }
@@ -1450,214 +1263,25 @@ async function saveContentToFirebase(
 
 
 /* =========================================================
-   FIREBASE LOAD / REAL-TIME SYNC
-========================================================= */
-
-function loadFirebaseData(){
-
-  const tasksRef =
-    ref(
-      db,
-      'tracker/tasks'
-    );
-
-
-  const contentRef =
-    ref(
-      db,
-      'tracker/content'
-    );
-
-
-  onValue(
-    tasksRef,
-    snapshot=>{
-
-      const data =
-        snapshot.val();
-
-      taskState = {};
-
-
-      if(
-        data &&
-        typeof data==='object'
-      ){
-
-        Object.entries(data)
-          .forEach(
-            ([encodedKey,value])=>{
-
-              try{
-
-                const key =
-                  decodeURIComponent(
-                    encodedKey
-                  );
-
-                if(value){
-                  taskState[key]=true;
-                }
-
-              }catch(error){
-
-                console.error(
-                  'Task decode error:',
-                  error
-                );
-
-              }
-
-            }
-          );
-
-      }
-
-
-      firebaseReady =
-        true;
-
-
-      setFirebaseStatus(
-        '✓ Firebase connected',
-        'online'
-      );
-
-
-      render();
-
-    },
-    error=>{
-
-      console.error(
-        'Tasks Firebase error:',
-        error
-      );
-
-      firebaseReady =
-        false;
-
-
-      setFirebaseStatus(
-        'Database permission error',
-        'error'
-      );
-
-    }
-  );
-
-
-  onValue(
-    contentRef,
-    snapshot=>{
-
-      const data =
-        snapshot.val();
-
-      contentState = {};
-
-
-      if(
-        data &&
-        typeof data==='object'
-      ){
-
-        Object.entries(data)
-          .forEach(
-            ([encodedKey,value])=>{
-
-              try{
-
-                const key =
-                  decodeURIComponent(
-                    encodedKey
-                  );
-
-                if(value){
-                  contentState[key]=value;
-                }
-
-              }catch(error){
-
-                console.error(
-                  'Content decode error:',
-                  error
-                );
-
-              }
-
-            }
-          );
-
-      }
-
-
-      firebaseReady =
-        true;
-
-
-      setFirebaseStatus(
-        '✓ Firebase connected',
-        'online'
-      );
-
-
-      render();
-
-    },
-    error=>{
-
-      console.error(
-        'Content Firebase error:',
-        error
-      );
-
-      firebaseReady =
-        false;
-
-
-      setFirebaseStatus(
-        'Database permission error',
-        'error'
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   CALENDAR
+   MINI CALENDAR
 ========================================================= */
 
 function renderMiniCalendar(){
 
   const el =
     document.getElementById(
-      'miniCalendar'
+      "miniCalendar"
     );
 
-
   const heads=[
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun'
+    "M","T","W","T","F","S","S"
   ];
 
-
-  el.innerHTML =
-    heads
-      .map(
-        x=>
-          `<div class="dow">${x[0]}</div>`
-      )
-      .join('');
-
+  let html =
+    heads.map(
+      h =>
+        `<div class="dow">${h}</div>`
+    ).join("");
 
   const first =
     new Date(
@@ -1666,159 +1290,146 @@ function renderMiniCalendar(){
       1
     );
 
-
-  const mondayOffset =
+  const offset =
     (first.getDay()+6)%7;
-
 
   for(
     let i=0;
-    i<mondayOffset;
+    i<offset;
     i++
   ){
 
-    el.innerHTML +=
-      `<div></div>`;
+    html += "<div></div>";
 
   }
 
-
   for(
-    let d=1;
-    d<=31;
-    d++
+    let day=1;
+    day<=31;
+    day++
   ){
 
     const date =
       new Date(
         2026,
         9,
-        d
+        day
       );
 
-
     const key =
-      keyForDate(date);
+      dateKey(date);
 
-
-    el.innerHTML += `
+    html += `
 
       <button
         class="cal-day ${
-          key===selectedKey
-            ? 'active'
-            : ''
+          key === selectedKey
+            ? "active"
+            : ""
         }"
-        data-key="${escapeAttr(key)}"
+        data-date="${key}"
       >
-
-        ${d}
-
+        ${day}
       </button>
 
     `;
 
   }
 
+  el.innerHTML = html;
 
   el
-    .querySelectorAll('.cal-day')
+    .querySelectorAll(".cal-day")
     .forEach(
-      b=>
-        b.onclick=
-          ()=>
+      button => {
+
+        button.onclick =
+          () =>
             selectDate(
-              b.dataset.key
-            )
+              button.dataset.date
+            );
+
+      }
     );
 
 }
 
 
 /* =========================================================
-   DATE NAVIGATION
+   DATE NAV
 ========================================================= */
 
 function renderDateNav(){
 
   const el =
     document.getElementById(
-      'dateNav'
+      "dateNav"
     );
-
 
   el.innerHTML =
-    dates
-      .map(
-        date=>{
+    dates.map(
+      date => {
 
-          const key =
-            keyForDate(date);
+        const key =
+          dateKey(date);
 
+        return `
 
-          return `
+          <button
+            class="date-btn ${
+              key === selectedKey
+                ? "active"
+                : ""
+            }"
+            data-date="${key}"
+          >
 
-            <button
-              class="date-btn ${
-                key===selectedKey
-                  ? 'active'
-                  : ''
-              }"
-              data-key="${escapeAttr(key)}"
-            >
+            <strong>
+              ${date.getDate()}
+            </strong>
 
-              <strong>
-                ${date.getDate()}
-              </strong>
+            <span>
+              ${
+                date.toLocaleDateString(
+                  "en-US",
+                  {
+                    weekday:"short"
+                  }
+                )
+              }
+            </span>
 
-              <span>
-                ${
-                  date.toLocaleDateString(
-                    'en-US',
-                    {
-                      weekday:'short'
-                    }
-                  )
-                }
-              </span>
+          </button>
 
-            </button>
+        `;
 
-          `;
-
-        }
-      )
-      .join('');
-
+      }
+    ).join("");
 
   el
-    .querySelectorAll('.date-btn')
+    .querySelectorAll(".date-btn")
     .forEach(
-      b=>
-        b.onclick=
-          ()=>
-            selectDate(
-              b.dataset.key
-            )
-    );
+      button => {
 
+        button.onclick =
+          () =>
+            selectDate(
+              button.dataset.date
+            );
+
+      }
+    );
 
   const active =
     el.querySelector(
-      '.active'
+      ".active"
     );
-
 
   if(active){
 
     active.scrollIntoView({
-
-      inline:'center',
-
-      behavior:'smooth',
-
-      block:'nearest'
-
+      inline:"center",
+      block:"nearest"
     });
 
   }
@@ -1837,28 +1448,22 @@ function render(){
       selectedKey
     );
 
+  document.getElementById(
+    "eyebrow"
+  ).textContent =
+    date.toLocaleDateString(
+      "en-US",
+      {
+        month:"long",
+        day:"numeric",
+        year:"numeric"
+      }
+    ).toUpperCase();
 
   document.getElementById(
-    'eyebrow'
+    "pageTitle"
   ).textContent =
-
-    date
-      .toLocaleDateString(
-        'en-US',
-        {
-          month:'long',
-          day:'numeric',
-          year:'numeric'
-        }
-      )
-      .toUpperCase();
-
-
-  document.getElementById(
-    'pageTitle'
-  ).textContent =
-    fmtLong(date);
-
+    longDate(date);
 
   renderDateNav();
 
@@ -1882,16 +1487,13 @@ function renderTasks(){
       selectedKey
     );
 
-
   const area =
     document.getElementById(
-      'taskArea'
+      "taskArea"
     );
 
-
   const sections =
-    getSections(date);
-
+    sectionsForDate(date);
 
   if(!sections.length){
 
@@ -1903,11 +1505,9 @@ function renderTasks(){
           No scheduled tasks.
         </strong>
 
-        <br>
+        <br><br>
 
-        <span>
-          Sunday is intentionally kept clear.
-        </span>
+        Sunday is intentionally kept clear.
 
       </div>
 
@@ -1917,167 +1517,127 @@ function renderTasks(){
 
   }
 
-
   area.innerHTML = `
 
     <div class="cards">
 
-      ${
-        sections
-          .map(
-            section=>{
+      ${sections.map(
+        section => {
 
-              const count =
-                section.tasks.length;
+          return `
 
+            <section
+              class="card ${section.cls}"
+            >
 
-              return `
+              <div class="card-head">
 
-                <section
-                  class="card ${
-                    section.cls
-                  } ${
-                    section.id==='weekend'
-                      ? 'weekend-card'
-                      : ''
-                  }"
+                <div class="section-title">
+
+                  <span class="section-icon">
+                    ${section.icon}
+                  </span>
+
+                  ${section.title}
+
+                </div>
+
+                <span
+                  class="section-count"
+                  id="count-${section.id}"
                 >
+                  0 / ${section.tasks.length}
+                </span>
 
-                  <div class="card-head">
+              </div>
 
-                    <div class="section-title">
-
-                      <span class="section-icon">
-                        ${section.icon}
-                      </span>
-
-                      ${section.title}
-
+              ${
+                section.id === "weekend"
+                  ? `
+                    <div class="weekend-note">
+                      Saturday special task —
+                      nothing else is scheduled today.
                     </div>
+                  `
+                  : ""
+              }
 
-                    <span
-                      class="section-count"
-                      id="count-${section.id}"
-                    >
-                      0 / ${count}
-                    </span>
+              <div>
 
-                  </div>
+                ${section.tasks.map(
+                  task => {
 
+                    const key =
+                      makeTaskKey(
+                        selectedKey,
+                        section.id,
+                        task
+                      );
 
-                  ${
-                    section.id==='weekend'
-                    ?
+                    const checked =
+                      !!taskState[key];
 
-                    `
+                    const hasContent =
+                      !!contentState[key];
 
-                      <div class="weekend-note">
+                    return `
 
-                        Saturday special task —
-                        nothing else is scheduled today.
+                      <label
+                        class="task ${
+                          checked
+                            ? "done"
+                            : ""
+                        }"
+                      >
 
-                      </div>
-
-                    `
-
-                    :
-
-                    ''
-                  }
-
-
-                  <div class="tasks">
-
-                    ${
-                      section.tasks
-                        .map(
-                          task=>{
-
-                            const tk =
-                              taskKey(
-                                selectedKey,
-                                section.id,
-                                task
-                              );
-
-
-                            const checked =
-                              !!taskState[tk];
-
-
-                            const has =
-                              !!contentState[tk];
-
-
-                            return `
-
-                              <label
-                                class="task ${
-                                  checked
-                                    ? 'done'
-                                    : ''
-                                }"
-                                data-task-key="${escapeAttr(tk)}"
-                              >
-
-                                <input
-                                  class="check"
-                                  type="checkbox"
-                                  ${
-                                    checked
-                                      ? 'checked'
-                                      : ''
-                                  }
-                                >
-
-                                <span class="task-label">
-                                  ${
-                                    escapeHtml(
-                                      task
-                                    )
-                                  }
-                                </span>
-
-                                <button
-                                  type="button"
-                                  class="content-btn ${
-                                    has
-                                      ? 'has-content'
-                                      : ''
-                                  }"
-                                  data-content-key="${escapeAttr(tk)}"
-                                >
-
-                                  ${
-                                    has
-                                      ? 'View Content'
-                                      : '＋ Content'
-                                  }
-
-                                </button>
-
-                              </label>
-
-                            `;
-
+                        <input
+                          class="check"
+                          type="checkbox"
+                          data-task="${escapeAttr(key)}"
+                          ${
+                            checked
+                              ? "checked"
+                              : ""
                           }
-                        )
-                        .join('')
-                    }
+                        >
 
-                  </div>
+                        <span class="task-label">
+                          ${escapeHtml(task)}
+                        </span>
 
-                </section>
+                        <button
+                          type="button"
+                          class="content-btn ${
+                            hasContent
+                              ? "has-content"
+                              : ""
+                          }"
+                          data-content="${escapeAttr(key)}"
+                        >
+                          ${
+                            hasContent
+                              ? "View Content"
+                              : "＋ Content"
+                          }
+                        </button>
 
-              `;
+                      </label>
 
-            }
-          )
-          .join('')
-      }
+                    `;
+
+                  }
+                ).join("")}
+
+              </div>
+
+            </section>
+
+          `;
+
+        }
+      ).join("")}
 
     </div>
-
 
     <button
       class="reset"
@@ -2089,91 +1649,86 @@ function renderTasks(){
   `;
 
 
+  /* CHECKBOXES */
+
   area
-    .querySelectorAll('.check')
+    .querySelectorAll(".check")
     .forEach(
-      cb=>
-        cb.addEventListener(
-          'change',
-          async e=>{
+      checkbox => {
 
-            const tk =
-              e.target
-                .closest('.task')
-                .dataset.taskKey;
+        checkbox.addEventListener(
+          "change",
+          async event => {
 
+            const key =
+              event.target.dataset.task;
 
-            if(
-              e.target.checked
-            ){
+            if(event.target.checked){
 
-              taskState[tk]=true;
+              taskState[key] = true;
 
             }else{
 
-              delete taskState[tk];
+              delete taskState[key];
 
             }
-
 
             updateProgress();
 
             updateSectionCounts();
 
-            await saveTask(
-              tk,
-              e.target.checked
-            );
+            await saveTasks();
 
           }
-        )
+        );
+
+      }
     );
 
+
+  /* CONTENT BUTTONS */
 
   area
-    .querySelectorAll('.content-btn')
+    .querySelectorAll(".content-btn")
     .forEach(
-      btn=>
-        btn.addEventListener(
-          'click',
-          ()=>openContent(
-            btn.dataset.contentKey
-          )
-        )
+      button => {
+
+        button.addEventListener(
+          "click",
+          () =>
+            openContent(
+              button.dataset.content
+            )
+        );
+
+      }
     );
 
+
+  /* RESET */
 
   document.getElementById(
-    'resetDay'
-  ).onclick = async ()=>{
+    "resetDay"
+  ).onclick =
+    async () => {
 
-    const tasks =
-      getTasks(
+      tasksForDate(
         selectedKey
+      ).forEach(
+        key => {
+          delete taskState[key];
+        }
       );
 
+      render();
 
-    for(
-      const tk of tasks
-    ){
+      await saveTasks();
 
-      delete taskState[tk];
-
-      await saveTask(
-        tk,
-        false
+      toast(
+        "Day reset"
       );
 
-    }
-
-
-    render();
-
-    toast(
-      'Day reset'
-    );
-
-  };
+    };
 
 
   updateSectionCounts();
@@ -2192,37 +1747,33 @@ function updateSectionCounts(){
       selectedKey
     );
 
-
-  getSections(date)
+  sectionsForDate(date)
     .forEach(
-      s=>{
+      section => {
 
-        const el =
+        const element =
           document.getElementById(
-            'count-'+s.id
+            "count-"+section.id
           );
 
-
-        if(!el){
+        if(!element){
           return;
         }
 
-
         const done =
-          s.tasks.filter(
-            t=>
+          section.tasks.filter(
+            task =>
               taskState[
-                taskKey(
+                makeTaskKey(
                   selectedKey,
-                  s.id,
-                  t
+                  section.id,
+                  task
                 )
               ]
           ).length;
 
-
-        el.textContent =
-          `${done} / ${s.tasks.length}`;
+        element.textContent =
+          `${done} / ${section.tasks.length}`;
 
       }
     );
@@ -2237,55 +1788,47 @@ function updateSectionCounts(){
 function updateProgress(){
 
   const tasks =
-    getTasks(
+    tasksForDate(
       selectedKey
     );
-
 
   const total =
     tasks.length;
 
-
   const done =
     tasks.filter(
-      t=>
-        taskState[t]
+      key =>
+        taskState[key]
     ).length;
 
-
-  const pct =
+  const percent =
     total
       ? Math.round(
-          done/total*100
+          done / total * 100
         )
       : 0;
 
-
   document.getElementById(
-    'progressPercent'
+    "progressPercent"
   ).textContent =
-    pct+'%';
-
+    percent+"%";
 
   document.getElementById(
-    'progressTitle'
+    "progressTitle"
   ).textContent =
     `${done} of ${total} tasks completed`;
 
-
   document.getElementById(
-    'barFill'
+    "barFill"
   ).style.width =
-    pct+'%';
-
+    percent+"%";
 
   document.getElementById(
-    'progressRing'
+    "progressRing"
   ).style.background =
-
     `conic-gradient(
       var(--gold)
-      ${pct*3.6}deg,
+      ${percent * 3.6}deg,
       #e6e3dd 0deg
     )`;
 
@@ -2293,15 +1836,15 @@ function updateProgress(){
 
 
 /* =========================================================
-   DATE SELECT
+   SELECT DATE
 ========================================================= */
 
 function selectDate(key){
 
   if(
     !dates.some(
-      d=>
-        keyForDate(d)===key
+      date =>
+        dateKey(date) === key
     )
   ){
 
@@ -2309,52 +1852,15 @@ function selectDate(key){
 
   }
 
-
   selectedKey =
     key;
 
-
   render();
 
-
   window.scrollTo({
-
     top:0,
-
-    behavior:'smooth'
-
+    behavior:"smooth"
   });
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHtml(s){
-
-  return String(s).replace(
-
-    /[&<>'"]/g,
-
-    c=>
-      ({
-        '&':'&amp;',
-        '<':'&lt;',
-        '>':'&gt;',
-        "'":'&#39;',
-        '"':'&quot;'
-      }[c])
-
-  );
-
-}
-
-
-function escapeAttr(s){
-
-  return escapeHtml(s);
 
 }
 
@@ -2363,97 +1869,77 @@ function escapeAttr(s){
    CONTENT MODAL
 ========================================================= */
 
-function openContent(tk){
+function openContent(key){
 
   currentContentKey =
-    tk;
-
+    key;
 
   const parts =
-    tk.split('__');
+    key.split("__");
 
+  const date =
+    dateFromKey(
+      parts[0]
+    );
 
-  const dateKey =
-    parts[0];
-
-
-  const section =
+  const sectionId =
     parts[1];
-
 
   const task =
     parts
       .slice(2)
-      .join('__');
+      .join("__");
 
-
-  const date =
-    dateFromKey(
-      dateKey
-    );
-
-
-  const sectionObj =
-    getSections(date)
+  const section =
+    sectionsForDate(date)
       .find(
-        s=>
-          s.id===section
+        s =>
+          s.id === sectionId
       );
 
+  const existing =
+    contentState[key] || "";
 
   document.getElementById(
-    'modalTitle'
+    "modalTitle"
   ).textContent =
-
-    contentState[tk]
-      ? 'Edit Content'
-      : 'Add Content';
-
+    existing
+      ? "Edit Content"
+      : "Add Content";
 
   document.getElementById(
-    'modalSub'
+    "modalSub"
   ).textContent =
-
-    `${fmtLong(date)} · ${
-      sectionObj
-        ? sectionObj.title
-        : section
+    `${longDate(date)} · ${
+      section
+        ? section.title
+        : sectionId
     } · ${task}`;
 
-
   document.getElementById(
-    'contentInput'
+    "contentInput"
   ).value =
-    contentState[tk] || '';
-
+    existing;
 
   document.getElementById(
-    'deleteContent'
+    "deleteContent"
   ).style.display =
-
-    contentState[tk]
-      ? 'block'
-      : 'none';
-
+    existing
+      ? "block"
+      : "none";
 
   document.getElementById(
-    'modalBackdrop'
+    "modalBackdrop"
   ).classList.add(
-    'open'
+    "open"
   );
 
-
   setTimeout(
-
-    ()=>
-      document
-        .getElementById(
-          'contentInput'
-        )
-        .focus(),
-
+    () =>
+      document.getElementById(
+        "contentInput"
+      ).focus(),
     50
-
   );
 
 }
@@ -2462,11 +1948,10 @@ function openContent(tk){
 function closeModal(){
 
   document.getElementById(
-    'modalBackdrop'
+    "modalBackdrop"
   ).classList.remove(
-    'open'
+    "open"
   );
-
 
   currentContentKey =
     null;
@@ -2474,29 +1959,27 @@ function closeModal(){
 }
 
 
+/* CLOSE MODAL */
+
 document.getElementById(
-  'closeModal'
+  "closeModal"
 ).onclick =
   closeModal;
 
-
 document.getElementById(
-  'cancelModal'
+  "cancelModal"
 ).onclick =
   closeModal;
 
-
 document.getElementById(
-  'modalBackdrop'
+  "modalBackdrop"
 ).addEventListener(
-
-  'click',
-
-  e=>{
+  "click",
+  event => {
 
     if(
-      e.target.id===
-      'modalBackdrop'
+      event.target.id ===
+      "modalBackdrop"
     ){
 
       closeModal();
@@ -2504,67 +1987,50 @@ document.getElementById(
     }
 
   }
-
 );
 
 
 /* =========================================================
-   SAVE CONTENT
+   SAVE CONTENT BUTTON
 ========================================================= */
 
 document.getElementById(
-  'saveContent'
-).onclick = async ()=>{
+  "saveContent"
+).onclick =
+  async () => {
 
-  const val =
+    const value =
+      document.getElementById(
+        "contentInput"
+      ).value.trim();
 
-    document
-      .getElementById(
-        'contentInput'
-      )
-      .value
-      .trim();
+    if(value){
 
+      contentState[
+        currentContentKey
+      ] = value;
 
-  if(val){
+    }else{
 
-    contentState[
-      currentContentKey
-    ] =
-      val;
+      delete contentState[
+        currentContentKey
+      ];
 
-  }else{
+    }
 
-    delete contentState[
-      currentContentKey
-    ];
+    closeModal();
 
-  }
+    renderTasks();
 
+    await saveContent();
 
-  const key =
-    currentContentKey;
+    toast(
+      value
+        ? "Content saved"
+        : "Content cleared"
+    );
 
-
-  closeModal();
-
-  renderTasks();
-
-  await saveContentToFirebase(
-    key,
-    val
-  );
-
-
-  toast(
-
-    val
-      ? 'Content saved'
-      : 'Content cleared'
-
-  );
-
-};
+  };
 
 
 /* =========================================================
@@ -2572,151 +2038,140 @@ document.getElementById(
 ========================================================= */
 
 document.getElementById(
-  'deleteContent'
-).onclick = async ()=>{
+  "deleteContent"
+).onclick =
+  async () => {
 
-  const key =
-    currentContentKey;
+    delete contentState[
+      currentContentKey
+    ];
+
+    closeModal();
+
+    renderTasks();
+
+    await saveContent();
+
+    toast(
+      "Content deleted"
+    );
+
+  };
 
 
-  delete contentState[
-    key
-  ];
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+document.getElementById(
+  "todayNav"
+).onclick =
+  () =>
+    selectDate(
+      "2026-10-05"
+    );
+
+document.getElementById(
+  "monthNav"
+).onclick =
+  () =>
+    selectDate(
+      "2026-10-05"
+    );
+
+document.getElementById(
+  "progressNav"
+).onclick =
+  () =>
+    toast(
+      "Progress is shown for the selected day"
+    );
+
+document.getElementById(
+  "settingsNav"
+).onclick =
+  () =>
+    toast(
+      "No settings are required"
+    );
+
+document.getElementById(
+  "prevMonth"
+).onclick =
+  () =>
+    toast(
+      "Tracker is set for October 2026"
+    );
+
+document.getElementById(
+  "nextMonth"
+).onclick =
+  () =>
+    toast(
+      "Tracker is set for October 2026"
+    );
 
 
-  closeModal();
+/* =========================================================
+   HTML ESCAPING
+========================================================= */
 
-  renderTasks();
+function escapeHtml(value){
 
-  await saveContentToFirebase(
-    key,
-    ''
+  return String(value).replace(
+    /[&<>'"]/g,
+    character => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      "'":"&#39;",
+      '"':"&quot;"
+    }[character])
   );
 
+}
 
-  toast(
-    'Content deleted'
-  );
+function escapeAttr(value){
 
-};
+  return escapeHtml(value);
+
+}
 
 
 /* =========================================================
    TOAST
 ========================================================= */
 
-function toast(msg){
+function toast(message){
 
-  const el =
+  const element =
     document.getElementById(
-      'toast'
+      "toast"
     );
 
+  element.textContent =
+    message;
 
-  el.textContent =
-    msg;
-
-
-  el.classList.add(
-    'show'
+  element.classList.add(
+    "show"
   );
 
-
   setTimeout(
-
-    ()=>
-      el.classList.remove(
-        'show'
+    () =>
+      element.classList.remove(
+        "show"
       ),
-
     1700
-
   );
 
 }
 
 
 /* =========================================================
-   NAV BUTTONS
-========================================================= */
-
-document.getElementById(
-  'todayNav'
-).onclick =
-  ()=>selectDate(
-    '2026-10-05'
-  );
-
-
-document.getElementById(
-  'monthNav'
-).onclick =
-  ()=>selectDate(
-    '2026-10-05'
-  );
-
-
-document.getElementById(
-  'progressNav'
-).onclick =
-  ()=>toast(
-    'Progress is shown for the selected day'
-  );
-
-
-document.getElementById(
-  'settingsNav'
-).onclick =
-  ()=>toast(
-    'No settings are required for this tracker'
-  );
-
-
-document.getElementById(
-  'prevMonth'
-).onclick =
-  ()=>toast(
-    'This tracker is set for October 2026'
-  );
-
-
-document.getElementById(
-  'nextMonth'
-).onclick =
-  ()=>toast(
-    'This tracker is set for October 2026'
-  );
-
-
-/* =========================================================
-   INITIAL RENDER
+   START
 ========================================================= */
 
 render();
-
-
-/* =========================================================
-   START FIREBASE
-========================================================= */
-
-try{
-
-  loadFirebaseData();
-
-}catch(error){
-
-  console.error(
-    'Firebase startup error:',
-    error
-  );
-
-
-  setFirebaseStatus(
-    'Firebase error',
-    'error'
-  );
-
-}
 
 </script>
 
