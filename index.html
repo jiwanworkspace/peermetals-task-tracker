@@ -722,6 +722,7 @@ h1{
     font-size:8px;
     padding:4px 6px;
   }
+
 }
 
 </style>
@@ -973,6 +974,7 @@ h1{
 
 /* =========================================================
    FIREBASE
+   NO AUTHENTICATION
 ========================================================= */
 
 import {
@@ -986,17 +988,11 @@ import {
   onValue
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-import {
-  getAuth,
-  signInAnonymously,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-
 
 const firebaseConfig = {
 
   apiKey:
-    "AIzaSyA4KdCgPeKwnkZXDcyqrzTozZo6WF6ueg",
+    "AIzaSyA4KdCgPeKwnNkwZXDcyqrzTozZo6WF6ueg",
 
   authDomain:
     "peermetals-task-tracker.firebaseapp.com",
@@ -1027,9 +1023,6 @@ const app =
 
 const db =
   getDatabase(app);
-
-const auth =
-  getAuth(app);
 
 
 /* =========================================================
@@ -1188,8 +1181,6 @@ let contentState = {};
 
 let firebaseReady = false;
 
-let currentUser = null;
-
 
 /* =========================================================
    FIREBASE STATUS
@@ -1209,21 +1200,35 @@ function setFirebaseStatus(
     message;
 
   el.className =
-    'firebase-status '+
-    type;
+    'firebase-status '+type;
 
 }
 
 
 /* =========================================================
    DATE HELPERS
+
+   IMPORTANT:
+   Uses LOCAL date instead of toISOString()
+   to avoid timezone problems.
 ========================================================= */
 
 function keyForDate(date){
 
-  return date
-    .toISOString()
-    .slice(0,10);
+  const year =
+    date.getFullYear();
+
+  const month =
+    String(
+      date.getMonth()+1
+    ).padStart(2,'0');
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2,'0');
+
+  return `${year}-${month}-${day}`;
 
 }
 
@@ -1354,42 +1359,24 @@ function getTasks(dateKey){
 
 
 /* =========================================================
-   FIREBASE SAVE
+   SAVE ONE TASK
+   Does NOT overwrite the whole database.
 ========================================================= */
 
-async function save(){
-
-  if(
-    !firebaseReady ||
-    !currentUser
-  ){
-
-    return;
-
-  }
-
+async function saveTask(
+  tk,
+  value
+){
 
   try{
 
-    await Promise.all([
-
-      set(
-        ref(
-          db,
-          'tracker/tasks'
-        ),
-        taskState
+    await set(
+      ref(
+        db,
+        `tracker/tasks/${encodeURIComponent(tk)}`
       ),
-
-      set(
-        ref(
-          db,
-          'tracker/content'
-        ),
-        contentState
-      )
-
-    ]);
+      value ? true : null
+    );
 
     setFirebaseStatus(
       '✓ Saved',
@@ -1399,17 +1386,17 @@ async function save(){
   }catch(error){
 
     console.error(
-      'Firebase save error:',
+      'Task save error:',
       error
     );
 
     setFirebaseStatus(
-      'Firebase save error',
+      'Database error',
       'error'
     );
 
     toast(
-      'Could not save to Firebase'
+      'Could not save task'
     );
 
   }
@@ -1418,7 +1405,52 @@ async function save(){
 
 
 /* =========================================================
-   FIREBASE LOAD
+   SAVE ONE CONTENT ITEM
+========================================================= */
+
+async function saveContentToFirebase(
+  tk,
+  value
+){
+
+  try{
+
+    await set(
+      ref(
+        db,
+        `tracker/content/${encodeURIComponent(tk)}`
+      ),
+      value || null
+    );
+
+    setFirebaseStatus(
+      '✓ Saved',
+      'online'
+    );
+
+  }catch(error){
+
+    console.error(
+      'Content save error:',
+      error
+    );
+
+    setFirebaseStatus(
+      'Database error',
+      'error'
+    );
+
+    toast(
+      'Could not save content'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   FIREBASE LOAD / REAL-TIME SYNC
 ========================================================= */
 
 function loadFirebaseData(){
@@ -1428,6 +1460,7 @@ function loadFirebaseData(){
       db,
       'tracker/tasks'
     );
+
 
   const contentRef =
     ref(
@@ -1443,10 +1476,53 @@ function loadFirebaseData(){
       const data =
         snapshot.val();
 
-      taskState =
-        data && typeof data==='object'
-          ? data
-          : {};
+      taskState = {};
+
+
+      if(
+        data &&
+        typeof data==='object'
+      ){
+
+        Object.entries(data)
+          .forEach(
+            ([encodedKey,value])=>{
+
+              try{
+
+                const key =
+                  decodeURIComponent(
+                    encodedKey
+                  );
+
+                if(value){
+                  taskState[key]=true;
+                }
+
+              }catch(error){
+
+                console.error(
+                  'Task decode error:',
+                  error
+                );
+
+              }
+
+            }
+          );
+
+      }
+
+
+      firebaseReady =
+        true;
+
+
+      setFirebaseStatus(
+        '✓ Firebase connected',
+        'online'
+      );
+
 
       render();
 
@@ -1458,8 +1534,12 @@ function loadFirebaseData(){
         error
       );
 
+      firebaseReady =
+        false;
+
+
       setFirebaseStatus(
-        'Firebase error',
+        'Database permission error',
         'error'
       );
 
@@ -1474,10 +1554,53 @@ function loadFirebaseData(){
       const data =
         snapshot.val();
 
-      contentState =
-        data && typeof data==='object'
-          ? data
-          : {};
+      contentState = {};
+
+
+      if(
+        data &&
+        typeof data==='object'
+      ){
+
+        Object.entries(data)
+          .forEach(
+            ([encodedKey,value])=>{
+
+              try{
+
+                const key =
+                  decodeURIComponent(
+                    encodedKey
+                  );
+
+                if(value){
+                  contentState[key]=value;
+                }
+
+              }catch(error){
+
+                console.error(
+                  'Content decode error:',
+                  error
+                );
+
+              }
+
+            }
+          );
+
+      }
+
+
+      firebaseReady =
+        true;
+
+
+      setFirebaseStatus(
+        '✓ Firebase connected',
+        'online'
+      );
+
 
       render();
 
@@ -1489,8 +1612,12 @@ function loadFirebaseData(){
         error
       );
 
+      firebaseReady =
+        false;
+
+
       setFirebaseStatus(
-        'Firebase error',
+        'Database permission error',
         'error'
       );
 
@@ -1577,15 +1704,12 @@ function renderMiniCalendar(){
     el.innerHTML += `
 
       <button
-
         class="cal-day ${
           key===selectedKey
             ? 'active'
             : ''
         }"
-
-        data-key="${key}"
-
+        data-key="${escapeAttr(key)}"
       >
 
         ${d}
@@ -1635,15 +1759,12 @@ function renderDateNav(){
           return `
 
             <button
-
               class="date-btn ${
                 key===selectedKey
                   ? 'active'
                   : ''
               }"
-
-              data-key="${key}"
-
+              data-key="${escapeAttr(key)}"
             >
 
               <strong>
@@ -1651,7 +1772,6 @@ function renderDateNav(){
               </strong>
 
               <span>
-
                 ${
                   date.toLocaleDateString(
                     'en-US',
@@ -1660,7 +1780,6 @@ function renderDateNav(){
                     }
                   )
                 }
-
               </span>
 
             </button>
@@ -1815,7 +1934,6 @@ function renderTasks(){
               return `
 
                 <section
-
                   class="card ${
                     section.cls
                   } ${
@@ -1823,7 +1941,6 @@ function renderTasks(){
                       ? 'weekend-card'
                       : ''
                   }"
-
                 >
 
                   <div class="card-head">
@@ -1831,26 +1948,18 @@ function renderTasks(){
                     <div class="section-title">
 
                       <span class="section-icon">
-
                         ${section.icon}
-
                       </span>
 
                       ${section.title}
 
                     </div>
 
-
                     <span
-
                       class="section-count"
-
                       id="count-${section.id}"
-
                     >
-
                       0 / ${count}
-
                     </span>
 
                   </div>
@@ -1903,55 +2012,40 @@ function renderTasks(){
                             return `
 
                               <label
-
                                 class="task ${
                                   checked
                                     ? 'done'
                                     : ''
                                 }"
-
                                 data-task-key="${escapeAttr(tk)}"
-
                               >
 
                                 <input
-
                                   class="check"
-
                                   type="checkbox"
-
                                   ${
                                     checked
                                       ? 'checked'
                                       : ''
                                   }
-
                                 >
 
-
                                 <span class="task-label">
-
                                   ${
                                     escapeHtml(
                                       task
                                     )
                                   }
-
                                 </span>
 
-
                                 <button
-
                                   type="button"
-
                                   class="content-btn ${
                                     has
                                       ? 'has-content'
                                       : ''
                                   }"
-
                                   data-content-key="${escapeAttr(tk)}"
-
                                 >
 
                                   ${
@@ -1986,15 +2080,10 @@ function renderTasks(){
 
 
     <button
-
       class="reset"
-
       id="resetDay"
-
     >
-
       ↻ &nbsp; Reset This Day
-
     </button>
 
   `;
@@ -2031,7 +2120,10 @@ function renderTasks(){
 
             updateSectionCounts();
 
-            await save();
+            await saveTask(
+              tk,
+              e.target.checked
+            );
 
           }
         )
@@ -2055,18 +2147,27 @@ function renderTasks(){
     'resetDay'
   ).onclick = async ()=>{
 
-    getTasks(
-      selectedKey
-    ).forEach(
-      t=>{
-        delete taskState[t];
-      }
-    );
+    const tasks =
+      getTasks(
+        selectedKey
+      );
+
+
+    for(
+      const tk of tasks
+    ){
+
+      delete taskState[tk];
+
+      await saveTask(
+        tk,
+        false
+      );
+
+    }
 
 
     render();
-
-    await save();
 
     toast(
       'Day reset'
@@ -2233,7 +2334,7 @@ function selectDate(key){
 
 function escapeHtml(s){
 
-  return s.replace(
+  return String(s).replace(
 
     /[&<>'"]/g,
 
@@ -2441,11 +2542,18 @@ document.getElementById(
   }
 
 
+  const key =
+    currentContentKey;
+
+
   closeModal();
 
   renderTasks();
 
-  await save();
+  await saveContentToFirebase(
+    key,
+    val
+  );
 
 
   toast(
@@ -2467,8 +2575,12 @@ document.getElementById(
   'deleteContent'
 ).onclick = async ()=>{
 
+  const key =
+    currentContentKey;
+
+
   delete contentState[
-    currentContentKey
+    key
   ];
 
 
@@ -2476,7 +2588,10 @@ document.getElementById(
 
   renderTasks();
 
-  await save();
+  await saveContentToFirebase(
+    key,
+    ''
+  );
 
 
   toast(
@@ -2553,7 +2668,7 @@ document.getElementById(
   'settingsNav'
 ).onclick =
   ()=>toast(
-    'Settings are not needed for the current tracker'
+    'No settings are required for this tracker'
   );
 
 
@@ -2581,73 +2696,27 @@ render();
 
 
 /* =========================================================
-   FIREBASE AUTHENTICATION
+   START FIREBASE
 ========================================================= */
 
-onAuthStateChanged(
-  auth,
-  async user=>{
+try{
 
-    if(user){
+  loadFirebaseData();
 
-      currentUser =
-        user;
+}catch(error){
 
-      firebaseReady =
-        true;
-
-
-      setFirebaseStatus(
-        '✓ Firebase connected',
-        'online'
-      );
+  console.error(
+    'Firebase startup error:',
+    error
+  );
 
 
-      loadFirebaseData();
+  setFirebaseStatus(
+    'Firebase error',
+    'error'
+  );
 
-      return;
-
-    }
-
-
-    try{
-
-      setFirebaseStatus(
-        'Signing in...'
-      );
-
-
-      await signInAnonymously(
-        auth
-      );
-
-    }catch(error){
-
-      console.error(
-        'Firebase authentication error:',
-        error
-      );
-
-
-      firebaseReady =
-        false;
-
-
-      setFirebaseStatus(
-        'Authentication error',
-        'error'
-      );
-
-
-      toast(
-        'Firebase authentication failed'
-      );
-
-    }
-
-  }
-
-);
+}
 
 </script>
 
